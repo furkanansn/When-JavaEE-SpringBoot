@@ -1,9 +1,9 @@
 package com.Hobedtech.when.api;
 
 import com.Hobedtech.when.dto.FavDto;
+import com.Hobedtech.when.entity.EventsUsers;
 import com.Hobedtech.when.service.impl.FavServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +31,9 @@ public class FavApi {
     @GetMapping("/users/search")
     public ResponseEntity<List<FavDto>> getUsersByEventIdAndUseName(@RequestParam Long eventId, @RequestParam String username){
         return ResponseEntity.ok(favServiceImpl.getUsersByEventIdAndUserName(eventId,username));
+    }
+    @PostMapping
+    public ResponseEntity<EventsUsers> save(@RequestBody EventsUsers userEvents){
+        return ResponseEntity.ok(favServiceImpl.save(userEvents));
     }
 }

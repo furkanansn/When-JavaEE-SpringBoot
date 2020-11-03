@@ -15,6 +15,18 @@ public interface DiscoverRepository extends JpaRepository<Events,Long> {
             "inner join usr_vp on events.usr_vp_id = usr_vp.id\n" +
             "where city = :cityName\n" +
             "AND\n" +
-            "cast(date AS text) like  %:date%",nativeQuery = true)
-    List<Events> findAll(@Param("cityName")String cityName, @Param("date")String date);
+            "cast(date AS text) like  %:date%", nativeQuery = true)
+    List<Events> findAll(@Param("cityName") String cityName, @Param("date") String date);
+
+
+    @Query(value = "select Count(users_id) from events \n" +
+            "            inner join usr_vp on events.usr_vp_id = usr_vp.id\n" +
+            "\t\t\tinner join events_users as i on events.id = i.events_id\n" +
+            "\t\t\tinner join users on users.id = i.users_id\n" +
+            "\t\t\twhere city = :cityName\n" +
+            "            AND\n" +
+            "            cast(date AS text) like  %:date%\n" +
+            "\t\t\t\n" +
+            "          ", nativeQuery = true)
+    Integer countAll(@Param("cityName") String cityName, @Param("date") String date);
 }

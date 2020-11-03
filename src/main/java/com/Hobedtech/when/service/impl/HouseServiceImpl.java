@@ -41,10 +41,7 @@ public class HouseServiceImpl implements HouseService {
     public List<HouseInitializeDto> getHouseInitialize(Long userId) {
         DateCurrent dateCurrent = new DateCurrent();
         List<Events> events = eventRepository.findAll(dateCurrent.getDate(),userId);
-        List<Events> eventsAnother = eventRepository.findAllAnother(dateCurrent.getDate());
-        List<Events> newEventList = Stream.concat(events.stream(),eventsAnother.stream())
-                .collect(Collectors.toList());
-        return Arrays.asList(modelMapper.map(newEventList,HouseInitializeDto[].class));
+        return Arrays.asList(modelMapper.map(events,HouseInitializeDto[].class));
     }
 
 

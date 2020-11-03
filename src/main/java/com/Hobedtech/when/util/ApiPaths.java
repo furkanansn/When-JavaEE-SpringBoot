@@ -26,5 +26,8 @@ public final class ApiPaths {
     public static final class UserVipCtrl {
         public static final String CTRL = BASE_PATH + "/user-vip";
     }
+    public static final class CommentCtrl {
+        public static final String CTRL = BASE_PATH + "/comment";
+    }
 
 }

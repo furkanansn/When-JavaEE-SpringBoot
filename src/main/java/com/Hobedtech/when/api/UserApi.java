@@ -53,8 +53,9 @@ public class UserApi {
         return ResponseEntity.ok(profileFavDto);
     }
     @GetMapping("/get-user-profile/venue")
-    public ResponseEntity<ProfileVenueDto> getUserProfileVenue(@RequestParam Long id){
-        ProfileVenueDto profileVenueDtoDto = userServiceImpl.getByIdProfileVenue(id);
+    public ResponseEntity<UserVipDto> getUserProfileVenue(@RequestParam Long id){
+        UserVipDto profileVenueDtoDto = userServiceImpl.getByIdProfileVenue(id);
+        System.out.println(profileVenueDtoDto);
         return ResponseEntity.ok(profileVenueDtoDto);
     }
 }

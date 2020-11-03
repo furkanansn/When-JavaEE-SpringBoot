@@ -1,8 +1,9 @@
 package com.Hobedtech.when.service.impl;
 
 import com.Hobedtech.when.dto.FavDto;
-import com.Hobedtech.when.entity.User;
+import com.Hobedtech.when.entity.*;
 import com.Hobedtech.when.repository.FavRepository;
+import com.Hobedtech.when.repository.UserEventsRepository;
 import com.Hobedtech.when.service.FavService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ import java.util.List;
 @Service
 public class FavServiceImpl implements FavService {
     private final FavRepository favRepository;
+    private final UserEventsRepository userEventsRepository;
     private final ModelMapper modelMapper;
 
-    public FavServiceImpl(FavRepository favRepository, ModelMapper modelMapper) {
+    public FavServiceImpl(FavRepository favRepository, UserEventsRepository userEventsRepository, ModelMapper modelMapper) {
         this.favRepository = favRepository;
+        this.userEventsRepository = userEventsRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -35,4 +38,17 @@ public class FavServiceImpl implements FavService {
         List<User> users = favRepository.findAllSearch(id,username);
         return Arrays.asList(modelMapper.map(users,FavDto[].class));
     }
+
+    @Override
+    public EventsUsers save(EventsUsers userEvents) {
+        userEvents.setFavStatus("ACTIVE");
+        return userEventsRepository.save(userEvents);
+    }
+
+    @Override
+    public EventsUsers delete(EventsUsers eventsUsers) {
+        eventsUsers.setFavStatus("DEACTIVE");
+        return userEventsRepository.save(eventsUsers);
+    }
+
 }

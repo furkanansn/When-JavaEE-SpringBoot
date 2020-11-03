@@ -1,7 +1,6 @@
 package com.Hobedtech.when.repository;
 
 
-import com.Hobedtech.when.entity.Friends;
 import com.Hobedtech.when.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

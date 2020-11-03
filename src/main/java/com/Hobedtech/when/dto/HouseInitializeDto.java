@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +17,5 @@ public class HouseInitializeDto {
     private String eventImagePath;
     private String city;
     private Date date;
+    Set<UserEventDto> users;
 }

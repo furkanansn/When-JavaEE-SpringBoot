@@ -82,8 +82,8 @@ public class User extends BaseEntity implements Serializable {
     private Set<Events> eventsCheckIn;
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE})
-    private Set<UsrVp> usrVps;
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.MERGE})
+    private Set<Comment> comments;
 
     private static final int EXPIRATION = 60 * 24;
 

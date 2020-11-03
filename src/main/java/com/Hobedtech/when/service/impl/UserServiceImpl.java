@@ -1,10 +1,11 @@
 package com.Hobedtech.when.service.impl;
 
 import com.Hobedtech.when.dto.*;
-import com.Hobedtech.when.entity.Friends;
 import com.Hobedtech.when.entity.User;
+import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.mail.MailService;
 import com.Hobedtech.when.repository.UserRepository;
+import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserService;
 import com.Hobedtech.when.util.DateCurrent;
 import com.Hobedtech.when.util.TPage;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.sql.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -35,12 +35,14 @@ public class UserServiceImpl implements UserService {
     private MailService notificationService;
 
     private final UserRepository userRepository;
+    private final UserVipRepository userVipRepository;
 
     private final ModelMapper modelMapper;
    // private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository ,ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserVipRepository userVipRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.userVipRepository = userVipRepository;
 
         this.modelMapper = modelMapper;
 
@@ -79,9 +81,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileVenueDto getByIdProfileVenue(Long id) {
-        User u = userRepository.getOne(id);
-        return modelMapper.map(u, ProfileVenueDto.class);
+    public UserVipDto getByIdProfileVenue(Long id) {
+        UsrVp u = userVipRepository.getVenueForProfile(id);
+        return modelMapper.map(u, UserVipDto.class);
     }
 
     @Override

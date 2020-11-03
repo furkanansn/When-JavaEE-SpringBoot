@@ -8,5 +8,5 @@ import java.util.List;
  * When Created by furkanansin on Oct, 2020
  */
 public interface DiscoverService {
-    List<DiscoverDto> getDtoByDateAndCity(String cityName,String date);
+    List<DiscoverDto> getDtoByDateAndCity(String cityName, String date);
 }

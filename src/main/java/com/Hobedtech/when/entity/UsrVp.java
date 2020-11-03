@@ -49,13 +49,10 @@ public class UsrVp extends BaseEntity {
     @Column(name = "confirmed")
     private String confirmedAccount;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "usrVps")
-    private Set<User> users;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usrVp", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userVips", fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH,CascadeType.MERGE})
     private Set<Events> events;
 
 }

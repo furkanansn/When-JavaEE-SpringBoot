@@ -26,6 +26,7 @@ public class DiscoverServiceImpl implements DiscoverService {
     @Override
     public List<DiscoverDto> getDtoByDateAndCity(String cityName, String date) {
         List<Events> events = discoverRepository.findAll(cityName,date);
-        return Arrays.asList(modelMapper.map(events,DiscoverDto[].class));
+        List<DiscoverDto> discoverDto = Arrays.asList(modelMapper.map(events,DiscoverDto[].class));
+        return discoverDto;
     }
 }

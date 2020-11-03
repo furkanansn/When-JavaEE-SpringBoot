@@ -20,7 +20,7 @@ public interface UserService {
 
     ProfileFavDto getByIdProfileFav(Long id);
 
-    ProfileVenueDto getByIdProfileVenue(Long id);
+    UserVipDto getByIdProfileVenue(Long id);
 
     TPage<UserDto> getAllPageable(Pageable pageable);
 
