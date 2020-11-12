@@ -1,0 +1,60 @@
+[ {
+  "id" : 1,
+  "title" : "Deneme başlığı",
+  "eventImagePath" : null,
+  "city" : "izmir",
+  "date" : "2020-10-31T12:02:56.000+0000",
+  "users" : [ {
+    "createdAt" : null,
+    "updatedAt" : null,
+    "id" : 1,
+    "username" : "dsafadsf",
+    "password" : "sdfsdfsdf",
+    "phone" : "5449561307",
+    "nameSurname" : null,
+    "bio" : "dsfasdfasd",
+    "firebaseId" : null,
+    "school" : "dasfasf",
+    "age" : 19
+  }, {
+    "createdAt" : null,
+    "updatedAt" : null,
+    "id" : 2,
+    "username" : null,
+    "password" : "dsfadsfasd",
+    "phone" : "5449561308",
+    "nameSurname" : "sdfasdfasf",
+    "bio" : "fdgdsfg",
+    "firebaseId" : "sdfdsafasdfasd",
+    "school" : "dsafasdfasdfas",
+    "age" : 18
+  } ],
+  "usrVps" : [ {
+    "createdAt" : null,
+    "updatedAt" : null,
+    "id" : 0,
+    "name" : "asdasd",
+    "email" : null,
+    "phone" : null,
+    "venueImagePath" : null,
+    "bio" : null,
+    "active" : null,
+    "iframe" : null
+  } ]
+}, {
+  "id" : 2,
+  "title" : "Deneme başlığı",
+  "eventImagePath" : null,
+  "city" : "izmir",
+  "date" : "2020-10-31T12:02:56.000+0000",
+  "users" : [ ],
+  "usrVps" : [ ]
+}, {
+  "id" : 3,
+  "title" : "Deneme 2 başlığı",
+  "eventImagePath" : null,
+  "city" : "İstanbul",
+  "date" : "2020-10-30T12:02:56.000+0000",
+  "users" : [ ],
+  "usrVps" : [ ]
+} ]
