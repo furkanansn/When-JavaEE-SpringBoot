@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface HouseRepository extends JpaRepository<Events,Long> {
+/*
     @Query(value ="select * from users\n" +
             "    inner join user_user_vip ON user_user_vip.user_id = users.id\n" +
             "    inner join usr_vp on usr_vp.id = user_user_vip.user_vip_id\n" +
@@ -21,6 +22,12 @@ public interface HouseRepository extends JpaRepository<Events,Long> {
             "    AND\n" +
             "    cast(events.date AS text) like  %:dateCurrent%",nativeQuery = true)
     List<Events> findAll(@Param("dateCurrent")String dateCurrent,@Param("user_id") Long user_id);
+*/
+
+
+    @Query(value ="select * from events\n" +
+            "    where cast(events.date AS text) like  %:dateCurrent%",nativeQuery = true)
+    List<Events> findAll(@Param("dateCurrent")String dateCurrent);
 
 
 

@@ -39,8 +39,8 @@ public class HouseApi {
 
 
     @GetMapping("house/initialize")
-    public ResponseEntity<List<HouseInitializeDto>> getHouseInitialize(@RequestParam Long userId) {
-        List<HouseInitializeDto> houseInitializeDto = eventServiceImpl.getHouseInitialize(userId);
+    public ResponseEntity<List<HouseInitializeDto>> getHouseInitialize() {
+        List<HouseInitializeDto> houseInitializeDto = eventServiceImpl.getHouseInitialize();
         return ResponseEntity.ok(houseInitializeDto);
     }
 

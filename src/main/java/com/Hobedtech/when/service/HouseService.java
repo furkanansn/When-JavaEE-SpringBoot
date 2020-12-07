@@ -11,6 +11,6 @@ import java.util.List;
 public interface HouseService {
     TPage<Events> getAllPageable(Pageable pageable);
 
-    List<HouseInitializeDto> getHouseInitialize(Long userId);
+    List<HouseInitializeDto> getHouseInitialize();
 
 }

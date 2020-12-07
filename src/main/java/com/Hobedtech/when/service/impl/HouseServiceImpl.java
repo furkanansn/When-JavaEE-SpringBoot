@@ -38,9 +38,9 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public List<HouseInitializeDto> getHouseInitialize(Long userId) {
+    public List<HouseInitializeDto> getHouseInitialize() {
         DateCurrent dateCurrent = new DateCurrent();
-        List<Events> events = eventRepository.findAll(dateCurrent.getDate(),userId);
+        List<Events> events = eventRepository.findAll(dateCurrent.getDate());
         return Arrays.asList(modelMapper.map(events,HouseInitializeDto[].class));
     }
 
