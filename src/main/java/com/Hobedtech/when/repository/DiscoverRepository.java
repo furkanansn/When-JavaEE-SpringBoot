@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface DiscoverRepository extends JpaRepository<Events,Long> {
     @Query(value = "select * from events \n" +
-            "inner join usr_vp on events.usr_vp_id = usr_vp.id\n" +
+            "inner join usr_vp on events.user_vips_id = usr_vp.id\n" +
             "where city = :cityName\n" +
             "AND\n" +
             "cast(date AS text) like  %:date%", nativeQuery = true)
@@ -20,7 +20,7 @@ public interface DiscoverRepository extends JpaRepository<Events,Long> {
 
 
     @Query(value = "select Count(users_id) from events \n" +
-            "            inner join usr_vp on events.usr_vp_id = usr_vp.id\n" +
+            "            inner join usr_vp on events.user_vips_id = usr_vp.id\n" +
             "\t\t\tinner join events_users as i on events.id = i.events_id\n" +
             "\t\t\tinner join users on users.id = i.users_id\n" +
             "\t\t\twhere city = :cityName\n" +
