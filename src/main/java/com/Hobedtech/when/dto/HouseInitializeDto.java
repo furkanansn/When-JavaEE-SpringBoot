@@ -1,6 +1,7 @@
 package com.Hobedtech.when.dto;
 
 
+import com.Hobedtech.when.entity.UsrVp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,5 @@ public class HouseInitializeDto {
     private String city;
     private Date date;
     Set<UserEventDto> users;
+    private Set<UsrVp> userVips;
 }
