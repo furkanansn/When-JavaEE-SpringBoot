@@ -219,11 +219,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String register(@Valid RegistrationRequest registrationRequest) {
       //  String token = UUID.randomUUID().toString();
+        User user = new User();
 
 
 
                 try {
-                    User user = new User();
                     DateCurrent dateCurrent = new DateCurrent();
 
                     //User
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
                     log.error("REGISTRATION=>", e);
                     return e.toString();
                 }
-                return "true";
+                return user.getId().toString();
 
     }
     @Transactional
