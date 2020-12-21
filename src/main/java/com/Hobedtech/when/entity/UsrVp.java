@@ -34,8 +34,7 @@ public class UsrVp extends BaseEntity {
     @Column(name = "bio", length = 100)
     private String bio;
 
-    @Column(name = "active")
-    private Boolean active;
+
 
     @Column(name = "iframe", length = 100)
     private String iFrame;

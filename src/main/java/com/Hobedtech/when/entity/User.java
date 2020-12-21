@@ -30,15 +30,12 @@ public class User extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Min(message = "Kullanıcı adı en az 3 karakterden oluşmalıdır", value = 3)
     @Column(name = "uname", length = 100, unique = true)
     private String username;
 
-    @Min(message = "Parola en az 8 karakterden oluşmalıdır",value = 8)
     @Column(name = "pwd", length = 200)
     private String password;
 
-    @NotEmpty(message = "E-mail boş olmamalıdır")
     @Email
     @Column(name = "email",unique = true)
     private String email;
@@ -61,8 +58,6 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "age")
     private Integer age;
 
-    @Column(name="active")
-    private Boolean active;
 
     @Column(name = "latitude")
     private String latitude;
