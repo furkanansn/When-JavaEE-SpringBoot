@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  * When Created by furkanansin on Oct, 2020
  */
 @RestController
-@RequestMapping(ApiPaths.SearchCtrl.CTRL +"/v1")
+@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.SearchCtrl.CTRL +"/v1")
 @Api(value = ApiPaths.SearchCtrl.CTRL)
 @Slf4j
 @CrossOrigin

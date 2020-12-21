@@ -43,16 +43,18 @@ public class AccountController {
         String response = userService.register(registrationRequest);
         return ResponseEntity.ok(response);
     }
+
+   /*
     @RequestMapping(value = "/send-again", method = RequestMethod.GET)
     public ResponseEntity<String> sendAgain(@RequestParam Long id){
         User user = userService.sendAgain(id);
         return ResponseEntity.ok("Aktivasyon linki tekrardan gönderildi");
-    }
+    }*/
     @RequestMapping(value = "/validate",method = RequestMethod.GET)
     public ResponseEntity<String> validate(@RequestParam String token,@RequestParam Long id){
       return ResponseEntity.ok( userService.validate(id,token));
     }
-    @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
     public ResponseEntity<String> sendAgain(@RequestParam String email){
         User user = userService.forgotPassword(email);
         if(user.getEmail().isEmpty()){return ResponseEntity.ok("Böyle bir hesap bulunamadı");}
@@ -62,11 +64,7 @@ public class AccountController {
     @RequestMapping(value = "/change-password",method = RequestMethod.GET)
     public ResponseEntity<String> changePassword(@RequestParam Long id){
         return ResponseEntity.ok(userService.changePassword(id));
-    }
+    }*/
 
-    @RequestMapping(value = "/change-password-by-user",method = RequestMethod.GET)
-    public ResponseEntity<String> changePasswordByUser(@RequestParam Long id, @RequestParam String password){
-        return ResponseEntity.ok(userService.changePasswordByUser(id,password));
-    }
 
 }

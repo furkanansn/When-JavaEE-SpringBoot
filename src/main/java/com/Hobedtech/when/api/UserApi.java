@@ -15,7 +15,7 @@ import java.util.List;
  * When Created by furkanansin on Oct, 2020
  */
 @RestController
-@RequestMapping(ApiPaths.UserCtrl.CTRL + "/v1")
+@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.UserCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class UserApi {
@@ -25,6 +25,10 @@ public class UserApi {
         this.userServiceImpl = userServiceImpl;
     }
 
+    @PutMapping("/user-update")
+    public ResponseEntity<UserDto> userUpate(@RequestBody UserDto userDto){
+        return ResponseEntity.ok(userServiceImpl.save(userDto));
+    }
     @GetMapping("/get-my-profile")
     public ResponseEntity<UserDto> getMyProfileById(@RequestParam Long id){
         UserDto generalUserInfo = userServiceImpl.getById(id);

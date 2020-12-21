@@ -5,6 +5,11 @@ public final class ApiPaths {
 
     private static final String BASE_PATH = "/api";
 
+    public static final String NORMALUSERAPIKEY = "77goJKlwme9bJ9WMEc5A";
+    public static final String VENUEAPIKEY = "PM5n8TwxBL7ZDkmRshHe";
+    public static final String ADMINAPIKEY = "9dTHINNUXsqA5O9tWHym";
+
+
     public static final class SearchCtrl {
         public static final String CTRL = BASE_PATH + "/search";
     }

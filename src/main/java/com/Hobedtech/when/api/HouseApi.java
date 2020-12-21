@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.EventCtrl.CTRL +"/v1")
+@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.EventCtrl.CTRL +"/v1")
 @Api(value = ApiPaths.EventCtrl.CTRL)
 @Slf4j
 @CrossOrigin

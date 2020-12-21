@@ -154,23 +154,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public String changePasswordByUser(Long id, String password) {
         User user = userRepository.getOne(id);
-        if(password.length() < 8){
-            return "Parola en az 8 karakterli olmalıdır";
-        }else {
+
             if(!user.getPassword().equals(password)){
                 user.setPassword(password);
                 user.setCreatedDate(new Date(System.currentTimeMillis()));
-                user.setExpiryDate(user.calculateExpiryDate(60 * 24));
-                String validationLink = "http://localhost:8000/api/token/change-password?id=" + user.getId();
-                notificationService.sendEmail(user.getEmail(),validationLink,"When Parola değiştirme isteği","Parolanız değiştirildi. Bunu siz yapmadıysanız aşağıdaki linke tıklayarak parolanızı sıfırlamanız ve E-posta parolanızı değiştirmeniz önerilir.");
-                return "Parolanız başarıyla değiştirildi";
+            //    user.setExpiryDate(user.calculateExpiryDate(60 * 24));
+             //   String validationLink = "http://localhost:8000/api/token/change-password?id=" + user.getId();
+             //   notificationService.sendEmail(user.getEmail(),validationLink,"When Parola değiştirme isteği","Parolanız değiştirildi. Bunu siz yapmadıysanız aşağıdaki linke tıklayarak parolanızı sıfırlamanız ve E-posta parolanızı değiştirmeniz önerilir.");
+                return "true";
             }
             else {
                 return "Parolanız bir önceki ile aynı olmamalıdır";
             }
-
-        }
-
     }
 
     @Override
@@ -223,33 +218,25 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public String register(@Valid RegistrationRequest registrationRequest) {
-        String token = UUID.randomUUID().toString();
+      //  String token = UUID.randomUUID().toString();
 
-        if( registrationRequest.getEmail().length() < 1) {
-                return "Email en az 5 karakterden oluşmalıdır";
-            }
-            else if(registrationRequest.getUserName().length() < 3){
-                return  "Kullanıcı adı en az 3 karakterden oluşmalıdır";
-            }
-            else if(registrationRequest.getPassword().length() < 8 ){
-                return "Parola en az 8 karakterden oluşmalıdır";
-        }
-            else {
+
+
                 try {
                     User user = new User();
                     DateCurrent dateCurrent = new DateCurrent();
 
                     //User
                     user.setEmail(registrationRequest.getEmail());
-                    user.setToken(token);
+                  //  user.setToken(token);
                     user.setCreatedDate(new Date(System.currentTimeMillis()));
-                    user.setExpiryDate(user.calculateExpiryDate(60 * 24));
+              //      user.setExpiryDate(user.calculateExpiryDate(60 * 24));
 
                     //  user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
                     user.setUsername(registrationRequest.getUserName());
-                    user.setActive(false);
+                  //  user.setActive(false);
                    User user1 =  userRepository.save(user);
-                   if(!user1.getId().toString().isEmpty()){
+                   /*if(!user1.getId().toString().isEmpty()){
                        //send email
                        String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
                        String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
@@ -257,25 +244,25 @@ public class UserServiceImpl implements UserService {
                        notificationService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
                        return "Mail Gönderildi";
 
-                   }
+                   }*/
 
                 } catch (Exception e) {
                     log.error("REGISTRATION=>", e);
                     return e.toString();
                 }
-                return "Validasyonlar doğrulandı";
-            }
+                return "true";
+
     }
     @Transactional
     public String validate(Long id,String token){
         try {
               User user =  userRepository.getOne(id);
-            if(user.getToken().equals(token)){
-               if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
+       //     if(user.getToken().equals(token)){
+               //if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
                    user.setActive(true);
-               }
-            }
-            return "Hesabınız Başarıyla Doğrulanmıştır";
+              // }
+          //  }
+            return "true";
         }catch (Exception e){
             log.error(String.valueOf(e));
             return "Beklenmedik bir sorunla karşılaşıldı lütfen tekrar deneyiniz";
