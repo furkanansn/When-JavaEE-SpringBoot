@@ -10,9 +10,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "User Data Transfer Object")
 public class UserDto {
-    @ApiModelProperty(required = true,value = "ID")
     private Long id;
     private String username;
     private String nameSurname;

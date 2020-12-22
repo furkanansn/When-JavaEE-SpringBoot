@@ -259,7 +259,7 @@ public class UserServiceImpl implements UserService {
               User user =  userRepository.getOne(id);
        //     if(user.getToken().equals(token)){
                //if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
-                   user.setActive(true);
+                   //user.setActive(true);
               // }
           //  }
             return "true";
