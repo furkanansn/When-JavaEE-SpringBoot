@@ -17,7 +17,7 @@ import java.util.List;
  * When Created by furkanansin on Oct, 2020
  */
 @RestController
-@RequestMapping("<API_KEY=>"+ApiPaths.VENUEAPIKEY+ApiPaths.UserVipCtrl.CTRL + "/v1")
+@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.UserVipCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class UserVipApi {

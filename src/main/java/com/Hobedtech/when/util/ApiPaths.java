@@ -34,5 +34,8 @@ public final class ApiPaths {
     public static final class CommentCtrl {
         public static final String CTRL = BASE_PATH + "/comment";
     }
+    public static final class VenueCtrl {
+        public static final String CTRL = BASE_PATH + "/venue";
+    }
 
 }
