@@ -34,7 +34,8 @@ public class UsrVp extends BaseEntity {
     @Column(name = "bio", length = 100)
     private String bio;
 
-
+    @Column(name = "password", length = 100)
+    private String password;
 
     @Column(name = "iframe", length = 100)
     private String iFrame;

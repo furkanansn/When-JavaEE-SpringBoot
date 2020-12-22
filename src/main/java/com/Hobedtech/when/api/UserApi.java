@@ -29,6 +29,14 @@ public class UserApi {
     public ResponseEntity<UserDto> userUpate(@RequestBody UserDto userDto){
         return ResponseEntity.ok(userServiceImpl.save(userDto));
     }
+
+    @GetMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestParam Long id, String password, String newPassword){
+        return ResponseEntity.ok(userServiceImpl.changePasswordByUser(id,password,newPassword));
+    }
+
+
+
     @GetMapping("/get-my-profile")
     public ResponseEntity<UserDto> getMyProfileById(@RequestParam Long id){
         UserDto generalUserInfo = userServiceImpl.getById(id);

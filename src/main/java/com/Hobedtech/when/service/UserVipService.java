@@ -24,4 +24,6 @@ public interface UserVipService {
 
     Events getEvents(Long userVipId);
 
+    Long login(String email, String password);
+
 }

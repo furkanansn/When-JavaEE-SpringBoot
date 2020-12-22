@@ -18,6 +18,8 @@ public interface UserVipRepository extends JpaRepository<UsrVp,Long> {
             "inner join usr_vp on usr_vp.id = i.user_vip_id where users.id = :userId and i.status = 'ACTIVE'",nativeQuery = true)
     UsrVp getVenueForProfile(@Param("userId") Long userId);
 
+    UsrVp getByEmail(String email);
+
 
 
 }

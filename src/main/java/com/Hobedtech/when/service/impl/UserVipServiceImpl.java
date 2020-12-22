@@ -49,7 +49,10 @@ public class UserVipServiceImpl implements UserVipService {
 
     @Override
     public Long register(UsrVp userVip) {
+        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(  userVip.getPassword());
+        userVip.setPassword(sha256hex);
         UsrVp usrVp = userVipRepository.save(userVip);
+
         return usrVp.getId();
     }
 
@@ -79,5 +82,18 @@ public class UserVipServiceImpl implements UserVipService {
     public Events getEvents(Long userVipId) {
 
         return eventRepository.findAllByUserVips(userVipId);
+    }
+
+    @Override
+    public Long login(String email, String password) {
+        UsrVp usrVp = userVipRepository.getByEmail(email);
+        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+
+        if(usrVp.getPassword().equals(sha256hex)){
+            return usrVp.getId();
+        }
+        else{
+            return 0L;
+        }
     }
 }

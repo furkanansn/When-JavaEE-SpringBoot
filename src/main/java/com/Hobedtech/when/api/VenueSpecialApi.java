@@ -58,4 +58,15 @@ public class VenueSpecialApi {
     public ResponseEntity<Events> getEventsByVenueId(Long id){
         return ResponseEntity.ok(userVipService.getEvents(id));
     }
+
+    @PostMapping("register")
+    public ResponseEntity<Long> register(@RequestBody  UsrVp usrVp){
+        return ResponseEntity.ok(userVipService.register(usrVp));
+    }
+
+    @GetMapping("login")
+    public ResponseEntity<Long> login(@RequestParam String email,String password){
+        return ResponseEntity.ok(userVipService.login(email,password));
+    }
+
 }

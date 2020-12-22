@@ -152,19 +152,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changePasswordByUser(Long id, String password) {
+    public String changePasswordByUser(Long id, String password,String newPassword) {
         User user = userRepository.getOne(id);
 
-            if(!user.getPassword().equals(password)){
-                user.setPassword(password);
-                user.setCreatedDate(new Date(System.currentTimeMillis()));
-            //    user.setExpiryDate(user.calculateExpiryDate(60 * 24));
-             //   String validationLink = "http://localhost:8000/api/token/change-password?id=" + user.getId();
-             //   notificationService.sendEmail(user.getEmail(),validationLink,"When Parola değiştirme isteği","Parolanız değiştirildi. Bunu siz yapmadıysanız aşağıdaki linke tıklayarak parolanızı sıfırlamanız ve E-posta parolanızı değiştirmeniz önerilir.");
-                return "true";
-            }
+        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+        if(!user.getPassword().equals(sha256hex)){
+            String newPass = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
+            user.setPassword(newPass);
+            user.setCreatedDate(new Date(System.currentTimeMillis()));
+            return"true";
+        }
             else {
-                return "Parolanız bir önceki ile aynı olmamalıdır";
+                return "false";
             }
     }
 
@@ -234,7 +233,11 @@ public class UserServiceImpl implements UserService {
 
                     //  user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
                     user.setUsername(registrationRequest.getUserName());
-                  //  user.setActive(false);
+                    String password = registrationRequest.getPassword();
+                    String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+                    user.setPassword(sha256hex);
+
+                    //  user.setActive(false);
                    User user1 =  userRepository.save(user);
                    /*if(!user1.getId().toString().isEmpty()){
                        //send email

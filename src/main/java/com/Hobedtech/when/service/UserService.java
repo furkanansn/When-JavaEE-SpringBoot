@@ -32,7 +32,7 @@ public interface UserService {
 
     String changePassword(Long id);
 
-    String changePasswordByUser(Long id , String password);
+    String changePasswordByUser(Long id , String password,String newPassword);
 
     Integer countFriends(Long userId);
 
