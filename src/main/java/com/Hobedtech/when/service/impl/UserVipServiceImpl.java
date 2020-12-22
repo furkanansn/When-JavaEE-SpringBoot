@@ -74,4 +74,10 @@ public class UserVipServiceImpl implements UserVipService {
         }
 
     }
+
+    @Override
+    public Events getEvents(Long userVipId) {
+
+        return eventRepository.findAllByUserVips(userVipId);
+    }
 }

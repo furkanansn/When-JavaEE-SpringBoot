@@ -22,4 +22,6 @@ public interface UserVipService {
     Events addEvent(Events events);
     Boolean deleteEvents(Long id);
 
+    Events getEvents(Long userVipId);
+
 }

@@ -53,4 +53,9 @@ public class VenueSpecialApi {
     public ResponseEntity<List<FriendDto>> getUserVipProfileFollowers(@RequestParam Long id){
         return ResponseEntity.ok(userVipService.getByIdFollowers(id));
     }
+
+    @GetMapping("event")
+    public ResponseEntity<Events> getEventsByVenueId(Long id){
+        return ResponseEntity.ok(userVipService.getEvents(id));
+    }
 }
