@@ -79,9 +79,9 @@ public class UserVipServiceImpl implements UserVipService {
     }
 
     @Override
-    public Events getEvents(Long userVipId) {
+    public List<Events> getEvents(Long userVipId) {
 
-        return eventRepository.findAllByUserVips(userVipId);
+        return eventRepository.getEventsVenue(userVipId);
     }
 
     @Override

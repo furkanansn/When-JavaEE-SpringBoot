@@ -22,7 +22,7 @@ public interface UserVipService {
     Events addEvent(Events events);
     Boolean deleteEvents(Long id);
 
-    Events getEvents(Long userVipId);
+    List<Events> getEvents(Long userVipId);
 
     Long login(String email, String password);
 

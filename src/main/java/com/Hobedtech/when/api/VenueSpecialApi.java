@@ -55,7 +55,7 @@ public class VenueSpecialApi {
     }
 
     @GetMapping("event")
-    public ResponseEntity<Events> getEventsByVenueId(Long id){
+    public ResponseEntity<List<Events>> getEventsByVenueId(Long id){
         return ResponseEntity.ok(userVipService.getEvents(id));
     }
 
