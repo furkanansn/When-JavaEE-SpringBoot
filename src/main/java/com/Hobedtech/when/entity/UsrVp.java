@@ -19,10 +19,10 @@ public class UsrVp extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "venue_name")
+    @Column(name = "venue_name",unique = true)
     private String username;
 
-    @Column(name = "email", length = 30)
+    @Column(name = "email", length = 30,unique = true)
     private String email;
 
     @Column(name = "phone", length = 11)
