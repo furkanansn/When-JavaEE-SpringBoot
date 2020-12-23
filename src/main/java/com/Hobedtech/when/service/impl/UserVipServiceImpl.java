@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service(value = "userService")
+@Service(value = "userVipService")
 public class UserVipServiceImpl implements UserVipService, UserDetailsService {
     private final UserVipRepository userVipRepository;
     private final FriendsUserVipRepository friendsUserVipRepository;
