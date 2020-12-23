@@ -38,7 +38,7 @@ public class HouseApi {
         return ResponseEntity.ok(data);
     }
 
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping("house/initialize")
     public ResponseEntity<List<HouseInitializeDto>> getHouseInitialize() {
         List<HouseInitializeDto> houseInitializeDto = eventServiceImpl.getHouseInitialize();
