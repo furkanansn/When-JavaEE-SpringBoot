@@ -43,12 +43,12 @@ public class VenueSpecialApi {
 
 
     @PostMapping("event")
-    public ResponseEntity<Events> addEvent(Events events){
+    public ResponseEntity<Events> addEvent(@RequestBody Events events){
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
 
     @DeleteMapping("event")
-    public ResponseEntity<Boolean> deleteEvent(Long id){
+    public ResponseEntity<Boolean> deleteEvent(@RequestParam Long id){
         return ResponseEntity.ok(userVipService.deleteEvents(id));
     }
 
