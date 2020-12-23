@@ -41,17 +41,17 @@ public class VenueSpecialApi {
         this.userVipService = userVipService;
     }
 
-    @PreAuthorize("hasRole('VENUE')")
+    @PreAuthorize("hasRole('ROlE_VENUE')")
     @PostMapping("event")
     public ResponseEntity<Events> addEvent(Events events){
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
-    @PreAuthorize("hasRole('VENUE')")
+    @PreAuthorize("hasRole('ROlE_VENUE')")
     @DeleteMapping("event")
     public ResponseEntity<Boolean> deleteEvent(Long id){
         return ResponseEntity.ok(userVipService.deleteEvents(id));
     }
-    @PreAuthorize("hasRole('VENUE')")
+    @PreAuthorize("hasRole('ROlE_VENUE')")
     @GetMapping("/profile")
     public ResponseEntity<UserVipDto> getUserVipProfile(@RequestParam Long id){
         UserVipDto userVipDto = userVipService.getById(id);
@@ -59,12 +59,12 @@ public class VenueSpecialApi {
         userVipDto.setFollowersCount(count);
         return ResponseEntity.ok(userVipDto);
     }
-    @PreAuthorize("hasRole('VENUE')")
+    @PreAuthorize("hasRole('ROlE_VENUE')")
     @GetMapping("/profile/followers")
     public ResponseEntity<List<FriendDto>> getUserVipProfileFollowers(@RequestParam Long id){
         return ResponseEntity.ok(userVipService.getByIdFollowers(id));
     }
-    @PreAuthorize("hasRole('VENUE')")
+    @PreAuthorize("hasRole('ROlE_VENUE')")
     @GetMapping("event")
     public ResponseEntity<List<Events>> getEventsByVenueId(Long id){
         return ResponseEntity.ok(userVipService.getEvents(id));
