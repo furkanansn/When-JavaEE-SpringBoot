@@ -5,6 +5,7 @@ import com.Hobedtech.when.dto.HouseInitializeDto;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.repository.HouseRepository;
 import com.Hobedtech.when.service.HouseService;
+import com.Hobedtech.when.service.NumberOfViewsService;
 import com.Hobedtech.when.util.DateCurrent;
 import com.Hobedtech.when.util.TPage;
 import org.modelmapper.ModelMapper;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class HouseServiceImpl implements HouseService {
+public class HouseServiceImpl implements HouseService{
 
     @Autowired
    private final HouseRepository eventRepository;
@@ -43,8 +44,6 @@ public class HouseServiceImpl implements HouseService {
         List<Events> events = eventRepository.findAll(dateCurrent.getDate());
         return Arrays.asList(modelMapper.map(events,HouseInitializeDto[].class));
     }
-
-
 
 
 

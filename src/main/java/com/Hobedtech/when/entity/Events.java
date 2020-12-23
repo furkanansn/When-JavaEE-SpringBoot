@@ -28,6 +28,9 @@ public class Events extends BaseEntity implements Serializable {
     @Column(name = "event_image_path",length = 200)
     private String eventImagePath;
 
+    @Column(name = "numberOfViews")
+    private Long numberOfViews;
+
     @Column(name = "city",length = 50)
     private String city;
 

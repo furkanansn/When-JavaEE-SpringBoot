@@ -4,6 +4,8 @@ import com.Hobedtech.when.dto.DiscoverDto;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.repository.DiscoverRepository;
 import com.Hobedtech.when.service.DiscoverService;
+import com.Hobedtech.when.service.NumberOfViewsService;
+import jdk.jfr.Event;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +31,6 @@ public class DiscoverServiceImpl implements DiscoverService {
         List<DiscoverDto> discoverDto = Arrays.asList(modelMapper.map(events,DiscoverDto[].class));
         return discoverDto;
     }
+
+
 }
