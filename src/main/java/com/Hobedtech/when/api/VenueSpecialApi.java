@@ -12,6 +12,7 @@ import com.Hobedtech.when.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,20 +41,17 @@ public class VenueSpecialApi {
         this.userVipService = userVipService;
     }
 
-    @PostMapping
-    public ResponseEntity<Long> registerVenue(UsrVp usrVp){
-        return ResponseEntity.ok(userVipService.register(usrVp));
-    }
+    @PreAuthorize("hasRole('VENUE')")
     @PostMapping("event")
     public ResponseEntity<Events> addEvent(Events events){
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
-
+    @PreAuthorize("hasRole('VENUE')")
     @DeleteMapping("event")
     public ResponseEntity<Boolean> deleteEvent(Long id){
         return ResponseEntity.ok(userVipService.deleteEvents(id));
     }
-
+    @PreAuthorize("hasRole('VENUE')")
     @GetMapping("/profile")
     public ResponseEntity<UserVipDto> getUserVipProfile(@RequestParam Long id){
         UserVipDto userVipDto = userVipService.getById(id);
@@ -61,11 +59,12 @@ public class VenueSpecialApi {
         userVipDto.setFollowersCount(count);
         return ResponseEntity.ok(userVipDto);
     }
+    @PreAuthorize("hasRole('VENUE')")
     @GetMapping("/profile/followers")
     public ResponseEntity<List<FriendDto>> getUserVipProfileFollowers(@RequestParam Long id){
         return ResponseEntity.ok(userVipService.getByIdFollowers(id));
     }
-
+    @PreAuthorize("hasRole('VENUE')")
     @GetMapping("event")
     public ResponseEntity<List<Events>> getEventsByVenueId(Long id){
         return ResponseEntity.ok(userVipService.getEvents(id));
