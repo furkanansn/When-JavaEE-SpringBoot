@@ -4,23 +4,34 @@ package com.Hobedtech.when.service.impl;
 import com.Hobedtech.when.dto.FriendDto;
 import com.Hobedtech.when.dto.UserVipDto;
 import com.Hobedtech.when.entity.Events;
+import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.repository.EventRepository;
 import com.Hobedtech.when.repository.FriendsUserVipRepository;
 import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserVipService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Service
-public class UserVipServiceImpl implements UserVipService {
+@Service(value = "userService")
+public class UserVipServiceImpl implements UserVipService, UserDetailsService {
     private final UserVipRepository userVipRepository;
     private final FriendsUserVipRepository friendsUserVipRepository;
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
+    @Autowired
+    private BCryptPasswordEncoder bcryptEncoder;
 
     public UserVipServiceImpl(UserVipRepository userVipRepository, FriendsUserVipRepository friendsUserVipRepository, EventRepository eventRepository, ModelMapper modelMapper) {
         this.userVipRepository = userVipRepository;
@@ -49,8 +60,8 @@ public class UserVipServiceImpl implements UserVipService {
 
     @Override
     public Long register(UsrVp userVip) {
-        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(  userVip.getPassword());
-        userVip.setPassword(sha256hex);
+        userVip.setPassword(bcryptEncoder.encode(userVip.getPassword()));
+        userVip.setRole("VENUE");
         UsrVp usrVp = userVipRepository.save(userVip);
 
         return usrVp.getId();
@@ -83,17 +94,19 @@ public class UserVipServiceImpl implements UserVipService {
 
         return eventRepository.getEventsVenue(userVipId);
     }
-
     @Override
-    public Long login(String email, String password) {
-        UsrVp usrVp = userVipRepository.getByEmail(email);
-        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        UsrVp user = userVipRepository.getByEmail(s);
+        if(user == null){
+            throw new UsernameNotFoundException("Invalid email or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
+    }
+    private Set<SimpleGrantedAuthority> getAuthority(UsrVp user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-        if(usrVp.getPassword().equals(sha256hex)){
-            return usrVp.getId();
-        }
-        else{
-            return 0L;
-        }
+        authorities.add(new SimpleGrantedAuthority("ROlE_" + user.getRole() ));
+
+        return authorities;
     }
 }

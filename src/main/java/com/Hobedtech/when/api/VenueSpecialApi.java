@@ -1,15 +1,24 @@
 package com.Hobedtech.when.api;
 
+import com.Hobedtech.when.config.TokenProvider;
+import com.Hobedtech.when.dto.AuthToken;
 import com.Hobedtech.when.dto.FriendDto;
+import com.Hobedtech.when.dto.LoginRequest;
 import com.Hobedtech.when.dto.UserVipDto;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.service.impl.UserVipServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
@@ -21,7 +30,11 @@ import java.util.List;
 @CrossOrigin
 public class VenueSpecialApi {
     private final UserVipServiceImpl userVipService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenProvider jwtTokenUtil;
 
     public VenueSpecialApi(UserVipServiceImpl userVipService) {
         this.userVipService = userVipService;
@@ -63,9 +76,18 @@ public class VenueSpecialApi {
         return ResponseEntity.ok(userVipService.register(usrVp));
     }
 
-    @GetMapping("login")
-    public ResponseEntity<Long> login(@RequestParam String email,String password){
-        return ResponseEntity.ok(userVipService.login(email,password));
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
+
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwtTokenUtil.generateToken(authentication);
+        return ResponseEntity.ok(new AuthToken(token));
     }
 
 }
