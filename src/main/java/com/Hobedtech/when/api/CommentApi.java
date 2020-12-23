@@ -18,7 +18,7 @@ import java.util.List;
  * When Created by furkanansin on Nov, 2020
  */
 @RestController
-@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.CommentCtrl.CTRL + "/v1")
+@RequestMapping(ApiPaths.CommentCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class CommentApi {

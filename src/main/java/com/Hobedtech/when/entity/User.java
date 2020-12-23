@@ -59,14 +59,15 @@ public class User extends BaseEntity implements Serializable {
     private Integer age;
 
 
-    @Column(name = "latitude")
-    private String latitude;
+    @Column(name = "location")
+    private String location;
 
-    @Column(name = "longitude")
-    private String longitude;
 
     @Column(name = "gender")
     private String gender;
+
+    @Column(name = "role")
+    private String role;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "users")

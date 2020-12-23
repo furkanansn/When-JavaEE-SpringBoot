@@ -2,6 +2,9 @@
 package com.Hobedtech.when.api;
 
 
+import com.Hobedtech.when.config.TokenProvider;
+import com.Hobedtech.when.dto.AuthToken;
+import com.Hobedtech.when.dto.LoginRequest;
 import com.Hobedtech.when.dto.RegistrationRequest;
 import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.repository.UserRepository;
@@ -9,6 +12,10 @@ import com.Hobedtech.when.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +28,11 @@ import javax.validation.Valid;
 @RequestMapping("/api/token")
 public class AccountController {
 
-   // @Autowired
- //   private AuthenticationManager authenticationManager;
-  //  @Autowired
-   // private JwtTokenUtil jwtTokenUtil;
+   @Autowired
+   private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenProvider jwtTokenUtil;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -65,6 +73,20 @@ public class AccountController {
     public ResponseEntity<String> changePassword(@RequestParam Long id){
         return ResponseEntity.ok(userService.changePassword(id));
     }*/
+
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
+
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwtTokenUtil.generateToken(authentication);
+        return ResponseEntity.ok(new AuthToken(token));
+    }
 
 
 }

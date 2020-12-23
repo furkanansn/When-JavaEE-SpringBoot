@@ -3,7 +3,6 @@ package com.Hobedtech.when.service.impl;
 import com.Hobedtech.when.dto.*;
 import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.entity.UsrVp;
-import com.Hobedtech.when.mail.MailService;
 import com.Hobedtech.when.repository.UserRepository;
 import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserService;
@@ -14,25 +13,27 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.sql.Date;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
-@Service
+@Service(value = "userService")
 @Slf4j
 @Validated
-public class UserServiceImpl implements UserService {
-
+public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
-    private MailService notificationService;
+    private BCryptPasswordEncoder bcryptEncoder;
+
 
     private final UserRepository userRepository;
     private final UserVipRepository userVipRepository;
@@ -112,7 +113,7 @@ public class UserServiceImpl implements UserService {
         String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
         String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
         String validationLink = "http://localhost:8000/api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
-        notificationService.sendEmail(user.getEmail(),validationLink,subject,text);
+   //     notificationService.sendEmail(user.getEmail(),validationLink,subject,text);
         return user;
     }
 
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
             String validationLink = "http://localhost:8000/api/token/change-password?id=" + user.getId();
             String subject = "When Parola Sıfırlama İsteği";
             String text = "Lütfen bu linke tıklayarak parolanızı sıfırlayınız";
-            notificationService.sendEmail(user.getEmail(), validationLink,subject,text);
+       //     notificationService.sendEmail(user.getEmail(), validationLink,subject,text);
         }
         return null;
     }
@@ -138,14 +139,14 @@ public class UserServiceImpl implements UserService {
             user.setPassword(newPassword);
             String subject = "When Yeni Parolanız";
             String text = "";
-             notificationService.sendEmail(user.getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
+      //       notificationService.sendEmail(user.getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
             return "Parola Başarıyla değiştirildi. Birazdan mail alıcaksınız.";
         }
 
         else {
             String subject = "When Yeni Parolanız";
             String text = "";
-            notificationService.sendEmail(user.getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
+      //      notificationService.sendEmail(user.getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
 
             return "Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.";
         }
@@ -217,15 +218,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public String register(@Valid RegistrationRequest registrationRequest) {
-      //  String token = UUID.randomUUID().toString();
         User user = new User();
+                  //  DateCurrent dateCurrent = new DateCurrent();
 
-
-
-                try {
-                    DateCurrent dateCurrent = new DateCurrent();
-
-                    //User
+                    user.setPassword(bcryptEncoder.encode(registrationRequest.getPassword()));
                     user.setEmail(registrationRequest.getEmail());
                   //  user.setToken(token);
                     user.setCreatedDate(new Date(System.currentTimeMillis()));
@@ -233,10 +229,7 @@ public class UserServiceImpl implements UserService {
 
                     //  user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
                     user.setUsername(registrationRequest.getUserName());
-                    String password = registrationRequest.getPassword();
-                    String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-                    user.setPassword(sha256hex);
-
+                    user.setRole("USER");
                     //  user.setActive(false);
                    User user1 =  userRepository.save(user);
                    /*if(!user1.getId().toString().isEmpty()){
@@ -249,10 +242,7 @@ public class UserServiceImpl implements UserService {
 
                    }*/
 
-                } catch (Exception e) {
-                    log.error("REGISTRATION=>", e);
-                    return e.toString();
-                }
+
                 return user.getId().toString();
 
     }
@@ -272,4 +262,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(s);
+        if(user == null){
+            throw new UsernameNotFoundException("Invalid email or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
+    }
+    private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROlE_" + user.getRole() ));
+
+        return authorities;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  * When Created by furkanansin on Oct, 2020
  */
 @RestController
-@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.FavCtrl.CTRL + "/v1")
+@RequestMapping(ApiPaths.FavCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class FavApi {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * When Created by furkanansin on Oct, 2020
  */
 @RestController
-@RequestMapping("<API_KEY=>"+ApiPaths.NORMALUSERAPIKEY+ApiPaths.NotificationCtrl.CTRL + "/v1")
+@RequestMapping(ApiPaths.NotificationCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class PushApi {

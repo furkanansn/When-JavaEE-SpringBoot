@@ -6,7 +6,6 @@ import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.service.impl.UserVipServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
-import com.sun.mail.iap.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import java.util.List;
  * when Created by furkanansin on Dec, 2020
  */
 @RestController
-@RequestMapping("<API_KEY=>"+ ApiPaths.VENUEAPIKEY+ApiPaths.VenueCtrl.CTRL + "/v1")
+@RequestMapping(ApiPaths.VenueCtrl.CTRL + "/v1")
 @Slf4j
 @CrossOrigin
 public class VenueSpecialApi {

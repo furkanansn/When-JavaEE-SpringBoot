@@ -2,39 +2,35 @@ package com.Hobedtech.when.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.time.LocalDate;
-//localhost:8000/swagger-ui/
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
-    ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("WHEN API REFERENCE")
-                .version("1.0.0")
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .apis(RequestHandlerSelectors.basePackage("com.Hobedtech.when"))
+                .paths(PathSelectors.regex("/.*"))
+                .build().apiInfo(apiEndPointsInfo());
+
+    }
+    private ApiInfo apiEndPointsInfo() {
+        return new ApiInfoBuilder().title("When Api Dökümantasyonu")
+                .description("Java EE Spring Boot Framework")
+                .contact(new Contact("Furkan Anşin", "", ""))
+                .license("Apache 2.0")
+                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .version("1.12.3")
                 .build();
     }
 
-    @Bean
-    public Docket customImplementation() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select().paths(PathSelectors.any())
-                .apis(RequestHandlerSelectors.basePackage("com.Hobedtech.when"))
-                .build()
-                .pathMapping("/")
-                .useDefaultResponseMessages(false)
-                .directModelSubstitute(LocalDate.class, String.class)
-                .genericModelSubstitutes(ResponseEntity.class);
-    }
 }
