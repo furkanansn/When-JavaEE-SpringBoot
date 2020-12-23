@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class HouseApi {
         return ResponseEntity.ok(data);
     }
 
-
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("house/initialize")
     public ResponseEntity<List<HouseInitializeDto>> getHouseInitialize() {
         List<HouseInitializeDto> houseInitializeDto = eventServiceImpl.getHouseInitialize();
