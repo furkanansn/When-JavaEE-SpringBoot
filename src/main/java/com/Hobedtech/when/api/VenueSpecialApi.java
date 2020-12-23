@@ -4,12 +4,12 @@ import com.Hobedtech.when.config.TokenProvider;
 import com.Hobedtech.when.dto.*;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.entity.UsrVp;
+import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.impl.UserVipServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,14 +28,16 @@ import java.util.List;
 @CrossOrigin
 public class VenueSpecialApi {
     private final UserVipServiceImpl userVipService;
+    private final UserVipRepository userVipRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-    public VenueSpecialApi(UserVipServiceImpl userVipService) {
+    public VenueSpecialApi(UserVipServiceImpl userVipService, UserVipRepository userVipRepository) {
         this.userVipService = userVipService;
+        this.userVipRepository = userVipRepository;
     }
 
 
@@ -74,7 +76,12 @@ public class VenueSpecialApi {
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
-
+        UsrVp userVip = new UsrVp();
+        userVip = userVipRepository.getByEmail(loginRequest.getEmail());
+        Long id = 0L;
+        if(userVip.getId() > 0){
+            id = userVip.getId();
+        }
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -83,7 +90,7 @@ public class VenueSpecialApi {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        return ResponseEntity.ok(new AuthToken(id,token));
     }
 
 }

@@ -76,6 +76,12 @@ public class AccountController {
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
+        User user = new User();
+       user =  userRepository.findByEmail(loginRequest.getEmail());
+        Long id = 0L;
+        if(user.getId() > 0){
+            id = user.getId();
+        }
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -85,7 +91,7 @@ public class AccountController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        return ResponseEntity.ok(new AuthToken(id,token));
     }
 
 
