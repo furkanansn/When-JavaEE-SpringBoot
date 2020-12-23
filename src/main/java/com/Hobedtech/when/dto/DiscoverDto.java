@@ -1,6 +1,7 @@
 package com.Hobedtech.when.dto;
 
 import com.Hobedtech.when.entity.User;
+import com.Hobedtech.when.entity.UsrVp;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class DiscoverDto {
     private String city;
     private Date date;
     Set<UserEventDto> users;
+    private UsrVp userVips;
 
 
 }

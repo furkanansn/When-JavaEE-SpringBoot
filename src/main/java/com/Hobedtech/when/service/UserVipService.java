@@ -1,6 +1,7 @@
 package com.Hobedtech.when.service;
 
 
+import com.Hobedtech.when.dto.EventDto;
 import com.Hobedtech.when.dto.FriendDto;
 import com.Hobedtech.when.dto.ProfileUserDtoUsers;
 import com.Hobedtech.when.dto.UserVipDto;
@@ -19,7 +20,7 @@ public interface UserVipService {
     Long register(UsrVp userVip);
     String confirm();
 
-    Events addEvent(Events events);
+    Events addEvent(EventDto events);
     Boolean deleteEvents(Long id);
 
     List<Events> getEvents(Long userVipId);

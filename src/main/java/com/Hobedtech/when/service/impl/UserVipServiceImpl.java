@@ -1,6 +1,7 @@
 package com.Hobedtech.when.service.impl;
 
 
+import com.Hobedtech.when.dto.EventDto;
 import com.Hobedtech.when.dto.FriendDto;
 import com.Hobedtech.when.dto.UserVipDto;
 import com.Hobedtech.when.entity.Events;
@@ -73,8 +74,14 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
     }
 
     @Override
-    public Events addEvent(Events events) {
-     return eventRepository.save(events);
+    public Events addEvent(EventDto events) {
+     Events events1 = new Events();
+     events1.setCity(events.getCity());
+     events1.setDate(events.getDate());
+     events1.setTitle(events.getTitle());
+     events1.setUserVips(events.getUserVips());
+     events1.setEventImagePath(events.getEventImagePath());
+        return eventRepository.save(events1);
     }
 
     @Override

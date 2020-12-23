@@ -1,10 +1,7 @@
 package com.Hobedtech.when.api;
 
 import com.Hobedtech.when.config.TokenProvider;
-import com.Hobedtech.when.dto.AuthToken;
-import com.Hobedtech.when.dto.FriendDto;
-import com.Hobedtech.when.dto.LoginRequest;
-import com.Hobedtech.when.dto.UserVipDto;
+import com.Hobedtech.when.dto.*;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.service.impl.UserVipServiceImpl;
@@ -43,7 +40,7 @@ public class VenueSpecialApi {
 
 
     @PostMapping("event")
-    public ResponseEntity<Events> addEvent(@RequestBody Events events){
+    public ResponseEntity<Events> addEvent(@RequestBody EventDto events){
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
 
