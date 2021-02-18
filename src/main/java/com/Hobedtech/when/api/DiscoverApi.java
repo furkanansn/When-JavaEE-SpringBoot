@@ -28,4 +28,10 @@ public class DiscoverApi {
         return ResponseEntity.ok(discoverDtos);
 
     }
+
+    @GetMapping("/discover/cyprus")
+    public ResponseEntity<List<DiscoverDto>> getDiscoverForCyprus(){
+        List<DiscoverDto> discoverDtos = discoverServiceImpl.getDiscoversForCyprusCity();
+        return ResponseEntity.ok(discoverDtos);
+    }
 }

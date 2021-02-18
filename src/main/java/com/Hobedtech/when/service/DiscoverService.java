@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface DiscoverService {
     List<DiscoverDto> getDtoByDateAndCity(String cityName, String date);
+
+    List<DiscoverDto> getDiscoversForCyprusCity();
 }
