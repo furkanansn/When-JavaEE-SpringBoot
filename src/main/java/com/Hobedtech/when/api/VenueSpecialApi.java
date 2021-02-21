@@ -41,12 +41,12 @@ public class VenueSpecialApi {
     }
 
 
-    @PostMapping("event")
+    @PostMapping("/event")
     public ResponseEntity<Events> addEvent(@RequestBody EventDto events){
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
 
-    @DeleteMapping("event")
+    @DeleteMapping("/event")
     public ResponseEntity<Boolean> deleteEvent(@RequestParam Long id){
         return ResponseEntity.ok(userVipService.deleteEvents(id));
     }
@@ -64,12 +64,12 @@ public class VenueSpecialApi {
         return ResponseEntity.ok(userVipService.getByIdFollowers(id));
     }
 
-    @GetMapping("event")
+    @GetMapping("/event")
     public ResponseEntity<List<Events>> getEventsByVenueId(Long id){
         return ResponseEntity.ok(userVipService.getEvents(id));
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<Long> register(@RequestBody  UsrVp usrVp){
         return ResponseEntity.ok(userVipService.register(usrVp));
     }

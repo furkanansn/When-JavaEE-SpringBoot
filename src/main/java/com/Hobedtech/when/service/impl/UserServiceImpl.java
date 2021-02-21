@@ -6,7 +6,6 @@ import com.Hobedtech.when.entity.UsrVp;
 import com.Hobedtech.when.repository.UserRepository;
 import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserService;
-import com.Hobedtech.when.util.DateCurrent;
 import com.Hobedtech.when.util.TPage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.*;
 
@@ -50,10 +50,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto save(UserDto user) {
-        User u = modelMapper.map(user, User.class);
-        u = userRepository.save(u);
-        user.setId(u.getId());
+    public UserUpdateDto save(UserUpdateDto user) {
+        User currentUser = userRepository.findById(user.getId()).get();
+        currentUser.setAge(user.getAge());
+        currentUser.setNameSurname(user.getNameSurname());
+        currentUser.setFirebaseId(user.getFirebaseId());
+        currentUser.setSchool(user.getSchool());
+        currentUser.setAge(user.getAge());
+        currentUser.setGender(user.getGender());
+        userRepository.save(currentUser);
+
         return user;
     }
 

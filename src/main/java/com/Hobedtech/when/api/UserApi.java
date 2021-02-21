@@ -26,7 +26,7 @@ public class UserApi {
     }
 
     @PutMapping("/user-update")
-    public ResponseEntity<UserDto> userUpate(@RequestBody UserDto userDto){
+    public ResponseEntity<UserUpdateDto> userUpdate(@RequestBody UserUpdateDto userDto){
         return ResponseEntity.ok(userServiceImpl.save(userDto));
     }
 

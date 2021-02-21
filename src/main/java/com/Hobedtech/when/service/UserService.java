@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface UserService {
 
-    UserDto save(UserDto user);
+    UserUpdateDto save(UserUpdateDto user);
 
     UserDto getById(Long id);
 
