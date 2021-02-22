@@ -96,7 +96,7 @@ public class User extends BaseEntity implements Serializable {
     private Date expiryDate;
 
     @Column(name="active")
-    private boolean active;
+    private Boolean active;
 
 
     public Date calculateExpiryDate(int expiryTimeInMinutes) {
