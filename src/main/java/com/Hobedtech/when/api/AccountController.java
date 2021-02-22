@@ -99,7 +99,7 @@ public class AccountController {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final String token = jwtTokenUtil.generateToken(authentication);
-            return new GeneralApi().sendResponse(new GeneralResponse(false,new AuthToken(userEmailAndPassCheck.get().getId(),"Bearer "+token),null));
+            return new GeneralApi().sendResponse(new GeneralResponse(true,new AuthToken(userEmailAndPassCheck.get().getId(),"Bearer "+token),null));
         }
         return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Yanlış E-posta ya da parola girdiniz"));
     }
