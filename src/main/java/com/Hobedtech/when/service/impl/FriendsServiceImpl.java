@@ -1,6 +1,7 @@
 package com.Hobedtech.when.service.impl;
 
 import com.Hobedtech.when.dto.FriendDto;
+import com.Hobedtech.when.dto.FriendShipDto;
 import com.Hobedtech.when.entity.Friends;
 import com.Hobedtech.when.entity.FriendsStatus;
 import com.Hobedtech.when.entity.User;
@@ -50,30 +51,32 @@ public class FriendsServiceImpl implements FriendsService {
     }
 
     @Override
-    public Boolean save(Friends friends) {
-        friends.setFriendsStatus(FriendsStatus.PENDING);
-        Optional<Friends> friends1 = Optional.ofNullable(friendsRepository.friendExist(friends.getFriendOne(), friends.getFriendTwo(), friends.getFriendOne(), friends.getFriendTwo()));
-        System.out.println(friends1.isEmpty());
-        if(!friends1.isEmpty()){
+    public Boolean save(FriendShipDto friends) {
+        Optional<Friends> friends1 = Optional.ofNullable(friendsRepository.findTopBy(friends.getFriendOne(), friends.getFriendTwo(), friends.getFriendOne(), friends.getFriendTwo()));
+        if(friends1.isPresent()){
         System.out.println("Böyle bir arkadaşlık var zaten");
             return false;
         }
         else{
-            friendsRepository.save(friends);
+            Friends friends2 = modelMapper.map(friends,Friends.class);
+
+            friends2.setFriendsStatus(FriendsStatus.PENDING);
+            friendsRepository.save(friends2);
             return true;
         }
     }
 
     @Override
-    public Friends update(Friends friends) {
-        friends.setFriendsStatus(FriendsStatus.ACTIVE);
-        return friendsRepository.save(friends);
+    public Friends update(FriendShipDto friends) {
+        Friends friends1 = friendsRepository.findTopBy(friends.getFriendOne(),friends.getFriendTwo(),friends.getFriendOne(),friends.getFriendTwo());
+        friends1.setFriendsStatus(FriendsStatus.ACTIVE);
+        return friendsRepository.save(friends1);
     }
 
 
     @Override
-    public Friends delete(Friends friends) {
-        friends.setFriendsStatus(FriendsStatus.DEACTIVE);
-        return friendsRepository.save(friends);
+    public void delete(FriendShipDto friends) {
+        Friends friends1 = friendsRepository.findTopBy(friends.getFriendOne(),friends.getFriendTwo(),friends.getFriendOne(),friends.getFriendTwo());
+        friendsRepository.delete(friends1);
     }
 }

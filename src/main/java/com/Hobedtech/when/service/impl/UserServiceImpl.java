@@ -3,6 +3,7 @@ package com.Hobedtech.when.service.impl;
 import com.Hobedtech.when.dto.*;
 import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.entity.UsrVp;
+import com.Hobedtech.when.mail.MailService;
 import com.Hobedtech.when.repository.UserRepository;
 import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserService;
@@ -21,8 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.servlet.ServletContext;
 import javax.validation.Valid;
-import java.lang.reflect.Type;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
@@ -33,25 +37,37 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
-
+    @Autowired
+    ServletContext servletContext;
 
     private final UserRepository userRepository;
     private final UserVipRepository userVipRepository;
 
     private final ModelMapper modelMapper;
-   // private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, UserVipRepository userVipRepository, ModelMapper modelMapper) {
+    private final MailService mailService;
+    public UserServiceImpl(UserRepository userRepository, UserVipRepository userVipRepository, ModelMapper modelMapper, MailService mailService) {
         this.userRepository = userRepository;
         this.userVipRepository = userVipRepository;
 
         this.modelMapper = modelMapper;
 
+        this.mailService = mailService;
     }
 
     @Override
-    public UserUpdateDto save(UserUpdateDto user) {
+    public UserUpdateDto save(UserUpdateDto user) throws IOException {
         User currentUser = userRepository.findById(user.getId()).get();
+
+        String base64Image = user.getImage().split(",")[1];
+
+        byte[] imageByte=Base64.getDecoder().decode(base64Image);
+        String image_path =currentUser.getUsername()+getAlphaNumericString(10);
+        String directory="/Users/furkanansin/IdeaProjects/images/"+ image_path+user.getImageType();
+
+        new FileOutputStream(directory).write(imageByte);
+
+
+        currentUser.setImage(image_path+user.getImageType());
         currentUser.setAge(user.getAge());
         currentUser.setNameSurname(user.getNameSurname());
         currentUser.setFirebaseId(user.getFirebaseId());
@@ -162,8 +178,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public String changePasswordByUser(Long id, String password,String newPassword) {
         User user = userRepository.getOne(id);
 
-        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-        if(!user.getPassword().equals(sha256hex)){
+        if(bcryptEncoder.matches(password,user.getPassword())){
             String newPass = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
             user.setPassword(newPass);
             user.setCreatedDate(new Date(System.currentTimeMillis()));
@@ -223,48 +238,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String register(@Valid RegistrationRequest registrationRequest) {
-        User user = new User();
-                  //  DateCurrent dateCurrent = new DateCurrent();
+    public boolean register(@Valid RegistrationRequest registrationRequest) {
 
-                    user.setPassword(bcryptEncoder.encode(registrationRequest.getPassword()));
-                    user.setEmail(registrationRequest.getEmail());
-                  //  user.setToken(token);
-                    user.setCreatedDate(new Date(System.currentTimeMillis()));
-              //      user.setExpiryDate(user.calculateExpiryDate(60 * 24));
-
-                    //  user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
-                    user.setUsername(registrationRequest.getUserName());
-                    user.setRole("USER");
-                    //  user.setActive(false);
-                   User user1 =  userRepository.save(user);
-                   /*if(!user1.getId().toString().isEmpty()){
-                       //send email
-                       String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
-                       String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
-                       String validationLink = "http://localhost:8000/api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
-                       notificationService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
-                       return "Mail Gönderildi";
-
-                   }*/
-
-
-                return user.getId().toString();
+     Optional<User> userCheck = Optional.ofNullable(userRepository.findByEmail(registrationRequest.getEmail()));
+     if(userCheck.isPresent()){
+         return false;
+     }
+         User user = new User();
+        user.setToken(getAlphaNumericString(100));
+        user.setExpiryDate(user.calculateExpiryDate(60));
+         user.setCreatedDate(new Date(System.currentTimeMillis()));
+         user.setEmail(registrationRequest.getEmail());
+         user.setUsername(registrationRequest.getUserName());
+         user.setPassword(bcryptEncoder.encode(registrationRequest.getPassword()));
+         user.setRole("USER");
+         user.setActive(false);
+         User user1 =  userRepository.save(user);
+         //send email
+         String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
+         String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
+         String validationLink = "http://localhost:8000/api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
+         mailService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
+     return true;
 
     }
     @Transactional
-    public String validate(Long id,String token){
+    public boolean validate(Long id,String token){
         try {
               User user =  userRepository.getOne(id);
-       //     if(user.getToken().equals(token)){
-               //if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
-                   //user.setActive(true);
-              // }
-          //  }
-            return "true";
+            if(user.getToken().equals(token)){
+               if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
+                   user.setActive(true);
+               }
+            }
+            return true;
         }catch (Exception e){
             log.error(String.valueOf(e));
-            return "Beklenmedik bir sorunla karşılaşıldı lütfen tekrar deneyiniz";
+            return false;
         }
     }
 

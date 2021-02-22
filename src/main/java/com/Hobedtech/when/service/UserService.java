@@ -5,12 +5,14 @@ import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.util.TPage;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
+
 /**
  * Created by temelt on 4.02.2019.
  */
 public interface UserService {
 
-    UserUpdateDto save(UserUpdateDto user);
+    UserUpdateDto save(UserUpdateDto user) throws IOException;
 
     UserDto getById(Long id);
 

@@ -17,6 +17,7 @@ public class OtherUserDto {
     private String bio;
     private String firebaseId;
     private String school;
+    private String image;
     private Integer age;
     private String latitude;
     private String longitude;

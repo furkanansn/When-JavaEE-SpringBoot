@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface FriendsRepository extends JpaRepository<Friends,Long> {
     @Query(value = "select * from friends where friend_one = :friend_one and friend_two = :friend_two or friend_one = :o and friend_two = :t and status <> 'DEACTIVE'",nativeQuery = true)
-    Friends friendExist(@Param("friend_one") Long friend_one, @Param("friend_two") Long friend_two,@Param("t") Long t, @Param("o") Long o);
+    Friends findTopBy(@Param("friend_one") Long friend_one, @Param("friend_two") Long friend_two,@Param("t") Long t, @Param("o") Long o);
 
 
 

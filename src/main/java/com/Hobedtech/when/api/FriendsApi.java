@@ -1,14 +1,13 @@
 package com.Hobedtech.when.api;
 
-import com.Hobedtech.when.dto.FriendDto;
+import com.Hobedtech.when.dto.FriendShipDto;
+import com.Hobedtech.when.dto.GeneralResponse;
 import com.Hobedtech.when.entity.Friends;
 import com.Hobedtech.when.service.impl.FriendsServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * When Created by furkanansin on Oct, 2020
@@ -24,27 +23,33 @@ public class FriendsApi {
         this.friendsServiceImpl = friendsServiceImpl;
     }
     @GetMapping
-    public ResponseEntity<List<FriendDto>> getFriends(@RequestParam Long userId){
-        return ResponseEntity.ok(friendsServiceImpl.getFriendsById(userId));
+    public ResponseEntity<GeneralResponse> getFriends(@RequestParam Long userId){
+        return new GeneralApi().sendResponse(new GeneralResponse(true,friendsServiceImpl.getFriendsById(userId),null));
+
     }
     @GetMapping("/search")
-    public ResponseEntity<List<FriendDto>> searchFriends(@RequestParam Long userId,@RequestParam String userName){
-    return ResponseEntity.ok(friendsServiceImpl.getFriendsByIdAndName(userId,userName));
+    public ResponseEntity<GeneralResponse> searchFriends(@RequestParam Long userId, @RequestParam String userName){
+        return new GeneralApi().sendResponse(new GeneralResponse(true,friendsServiceImpl.getFriendsByIdAndName(userId,userName),null));
+
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> addFriend(@RequestBody Friends friends){
-        return ResponseEntity.ok(friendsServiceImpl.save(friends));
+    public ResponseEntity<GeneralResponse> addFriend(@RequestBody FriendShipDto friends){
+        return new GeneralApi().sendResponse(new GeneralResponse(true,friendsServiceImpl.save(friends),null));
+
     }
 
     @PutMapping
-    public ResponseEntity<Friends> updateFriend(@RequestBody Friends friends){
-        return ResponseEntity.ok(friendsServiceImpl.update(friends));
+    public ResponseEntity<GeneralResponse> updateFriend(@RequestBody FriendShipDto friends){
+        return new GeneralApi().sendResponse(new GeneralResponse(true,friendsServiceImpl.update(friends),null));
     }
 
     @DeleteMapping
-    public ResponseEntity<Friends> deleteFriend(@RequestBody Friends friends){
-        return ResponseEntity.ok(friendsServiceImpl.delete(friends));
+    public ResponseEntity<GeneralResponse> deleteFriend(@RequestBody FriendShipDto friends){
+        friendsServiceImpl.delete(friends);
+
+        return new GeneralApi().sendResponse(new GeneralResponse(true,true,null));
+
     }
 
 

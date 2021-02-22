@@ -1,6 +1,7 @@
 package com.Hobedtech.when.api;
 
 import com.Hobedtech.when.dto.DiscoverDto;
+import com.Hobedtech.when.dto.GeneralResponse;
 import com.Hobedtech.when.service.impl.DiscoverServiceImpl;
 import com.Hobedtech.when.util.ApiPaths;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +24,15 @@ public class DiscoverApi {
         this.discoverServiceImpl = discoverServiceImpl;
     }
     @GetMapping("/discover/initialize")
-    public ResponseEntity<List<DiscoverDto>> getDiscoverInitialize(@RequestParam String cityName, @RequestParam String date){
+    public ResponseEntity<GeneralResponse> getDiscoverInitialize(@RequestParam String cityName, @RequestParam String date){
         List<DiscoverDto> discoverDtos = discoverServiceImpl.getDtoByDateAndCity(cityName,date);
-        return ResponseEntity.ok(discoverDtos);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,discoverDtos,null));
 
     }
 
     @GetMapping("/discover/cyprus")
-    public ResponseEntity<List<DiscoverDto>> getDiscoverForCyprus(){
+    public ResponseEntity<GeneralResponse> getDiscoverForCyprus(){
         List<DiscoverDto> discoverDtos = discoverServiceImpl.getDiscoversForCyprusCity();
-        return ResponseEntity.ok(discoverDtos);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,discoverDtos,null));
     }
 }

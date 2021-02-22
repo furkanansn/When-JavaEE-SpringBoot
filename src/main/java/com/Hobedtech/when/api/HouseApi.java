@@ -1,5 +1,6 @@
 package com.Hobedtech.when.api;
 
+import com.Hobedtech.when.dto.GeneralResponse;
 import com.Hobedtech.when.dto.HouseInitializeDto;
 import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.service.impl.HouseServiceImpl;
@@ -21,6 +22,7 @@ import java.util.List;
 @Slf4j
 @CrossOrigin
 
+
 /*
  * When Created by furkanansin on Oct, 2020
  */
@@ -31,18 +33,13 @@ public class HouseApi {
     public HouseApi(HouseServiceImpl eventServiceImpl) {
         this.eventServiceImpl = eventServiceImpl;
     }
-    @GetMapping("/pagination")
-    @ApiOperation(value = "get all", response = Events.class)
-    public ResponseEntity<TPage<Events>> getAll(Pageable pageable){
-        TPage<Events> data = eventServiceImpl.getAllPageable(pageable);
-        return ResponseEntity.ok(data);
-    }
+
 
 
     @GetMapping("house/initialize")
-    public ResponseEntity<List<HouseInitializeDto>> getHouseInitialize() {
+    public ResponseEntity<GeneralResponse> getHouseInitialize() {
         List<HouseInitializeDto> houseInitializeDto = eventServiceImpl.getHouseInitialize();
-        return ResponseEntity.ok(houseInitializeDto);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,houseInitializeDto,null));
     }
 
 

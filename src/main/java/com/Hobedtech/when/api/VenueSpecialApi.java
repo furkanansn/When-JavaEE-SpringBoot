@@ -17,7 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * when Created by furkanansin on Dec, 2020
@@ -42,7 +44,7 @@ public class VenueSpecialApi {
 
 
     @PostMapping("/event")
-    public ResponseEntity<Events> addEvent(@RequestBody EventDto events){
+    public ResponseEntity<Events> addEvent(@RequestBody EventDto events) throws IOException {
         return ResponseEntity.ok(userVipService.addEvent(events));
     }
 
@@ -70,18 +72,23 @@ public class VenueSpecialApi {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Long> register(@RequestBody  UsrVp usrVp){
-        return ResponseEntity.ok(userVipService.register(usrVp));
+    public ResponseEntity<GeneralResponse> register(@RequestBody  UsrVp usrVp){
+        Long res = userVipService.register(usrVp);
+        if(res == 0L){
+            return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Bu E-posta adresi veya kullanıcı adı ile kayıtlı bir kullanıcı bulunmaktadır"));
+
+        }
+        return new GeneralApi().sendResponse(new GeneralResponse(true,res,null));
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
-        UsrVp userVip = new UsrVp();
-        userVip = userVipRepository.getByEmail(loginRequest.getEmail());
-        Long id = 0L;
-        if(userVip.getId() > 0){
-            id = userVip.getId();
-        }
+    Optional<UsrVp> userVip = Optional.ofNullable(userVipRepository.getByEmail(loginRequest.getEmail()));
+
+    if(!userVip.isPresent()){
+        return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Yanlış E-posta ya da parola girdiniz"));
+
+    }
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -90,7 +97,7 @@ public class VenueSpecialApi {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(id,token));
+        return new GeneralApi().sendResponse(new GeneralResponse(true,new AuthToken(userVip.get().getId(),token),null));
     }
 
 }

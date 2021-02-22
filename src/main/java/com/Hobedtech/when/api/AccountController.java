@@ -4,6 +4,7 @@ package com.Hobedtech.when.api;
 
 import com.Hobedtech.when.config.TokenProvider;
 import com.Hobedtech.when.dto.AuthToken;
+import com.Hobedtech.when.dto.GeneralResponse;
 import com.Hobedtech.when.dto.LoginRequest;
 import com.Hobedtech.when.dto.RegistrationRequest;
 import com.Hobedtech.when.entity.User;
@@ -16,11 +17,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,9 +30,10 @@ import javax.validation.Valid;
 @RequestMapping("/api/token")
 public class AccountController {
 
-   @Autowired
-   private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private BCryptPasswordEncoder bcryptEncoder;
     @Autowired
     private TokenProvider jwtTokenUtil;
     @Autowired
@@ -47,22 +50,29 @@ public class AccountController {
     }*/
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
-        String response = userService.register(registrationRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<GeneralResponse> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
+        boolean response = userService.register(registrationRequest);
+
+        if(!response){
+            return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Bu E-posta adresi veya kullanıcı adı ile kayıtlı bir kullanıcı bulunmaktadır"));
+
+        }
+        return new GeneralApi().sendResponse(new GeneralResponse(true,response,null));
     }
 
-   /*
+
     @RequestMapping(value = "/send-again", method = RequestMethod.GET)
-    public ResponseEntity<String> sendAgain(@RequestParam Long id){
+    public ResponseEntity<GeneralResponse> sendAgain(@RequestParam Long id){
         User user = userService.sendAgain(id);
-        return ResponseEntity.ok("Aktivasyon linki tekrardan gönderildi");
-    }*/
-    @RequestMapping(value = "/validate",method = RequestMethod.GET)
-    public ResponseEntity<String> validate(@RequestParam String token,@RequestParam Long id){
-      return ResponseEntity.ok( userService.validate(id,token));
+        return new GeneralApi().sendResponse(new GeneralResponse(false,"Aktivasyon linki tekrardan gönderildi\"",null));
+
+
     }
-    /*@RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
+    @RequestMapping(value = "/validate",method = RequestMethod.GET)
+    public ResponseEntity<Boolean> validate(@RequestParam String token, @RequestParam Long id){
+        return ResponseEntity.ok( userService.validate(id,token));
+    }
+    @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
     public ResponseEntity<String> sendAgain(@RequestParam String email){
         User user = userService.forgotPassword(email);
         if(user.getEmail().isEmpty()){return ResponseEntity.ok("Böyle bir hesap bulunamadı");}
@@ -72,26 +82,26 @@ public class AccountController {
     @RequestMapping(value = "/change-password",method = RequestMethod.GET)
     public ResponseEntity<String> changePassword(@RequestParam Long id){
         return ResponseEntity.ok(userService.changePassword(id));
-    }*/
+    }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginRequest loginRequest) throws AuthenticationException {
-        User user = new User();
-       user =  userRepository.findByEmail(loginRequest.getEmail());
-        Long id = 0L;
-        if(user.getId() > 0){
-            id = user.getId();
+        Optional<User> userEmailAndPassCheck = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
+        if(userEmailAndPassCheck.isPresent()){
+            if(!bcryptEncoder.matches(loginRequest.getPassword(),userEmailAndPassCheck.get().getPassword())){
+                return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Yanlış E-posta ya da parola girdiniz"));
+            }
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final String token = jwtTokenUtil.generateToken(authentication);
+            return new GeneralApi().sendResponse(new GeneralResponse(false,new AuthToken(userEmailAndPassCheck.get().getId(),"Bearer "+token),null));
         }
-
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(id,token));
+        return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Yanlış E-posta ya da parola girdiniz"));
     }
 
 

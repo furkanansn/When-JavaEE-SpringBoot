@@ -1,5 +1,6 @@
 package com.Hobedtech.when.api;
 
+import com.Hobedtech.when.dto.GeneralResponse;
 import com.Hobedtech.when.dto.SearchDto;
 import com.Hobedtech.when.entity.User;
 import com.Hobedtech.when.entity.UsrVp;
@@ -36,26 +37,27 @@ public class SearchApi {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Object> getSearch(@RequestParam String userName){
+    public ResponseEntity<GeneralResponse> getSearch(@RequestParam String userName){
         List<User> searchUserRequest = searchServiceImpl.searchByUserName(userName);
         List<UsrVp> searchVenueRequest = searchVenueServiceImpl.sarchByVenueName(userName);
-        System.out.println("venue" +searchVenueRequest);
-        System.out.println("user" +searchUserRequest);
-       // return ResponseEntity.ok(searchVenueRequest);
 
         if(!searchUserRequest.isEmpty() || !searchVenueRequest.isEmpty()){
             List<Object> list = Stream.concat(searchUserRequest.stream(),searchVenueRequest.stream())
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(modelMapper.map(list, SearchDto[].class));
+            return new GeneralApi().sendResponse(new GeneralResponse(true,modelMapper.map(list, SearchDto[].class),null));
+
         }
         if(!searchUserRequest.isEmpty()){
-            return ResponseEntity.ok(modelMapper.map(searchUserRequest,SearchDto[].class));
+            return new GeneralApi().sendResponse(new GeneralResponse(true,modelMapper.map(searchUserRequest,SearchDto[].class),null));
+
         }
         if(!searchVenueRequest.isEmpty()){
-            return ResponseEntity.ok(modelMapper.map(searchVenueRequest,SearchDto[].class));
+            return new GeneralApi().sendResponse(new GeneralResponse(true,modelMapper.map(searchVenueRequest,SearchDto[].class),null));
+
         }
         else {
-                return ResponseEntity.ok("Böyle bir kişi ya da mekan bulunamadı bitch");
+            return new GeneralApi().sendResponse(new GeneralResponse(false,null,"Böyle bir kişi ya da mekan bulunamadı"));
+
         }
 
 

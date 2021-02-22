@@ -1,6 +1,7 @@
 package com.Hobedtech.when.service;
 
 import com.Hobedtech.when.dto.FriendDto;
+import com.Hobedtech.when.dto.FriendShipDto;
 import com.Hobedtech.when.entity.Friends;
 
 import java.util.List;
@@ -13,10 +14,10 @@ public interface FriendsService {
 
     List<FriendDto> getFriendsByIdAndName(Long userId,String username);
 
-    Boolean save(Friends friends);
+    Boolean save(FriendShipDto friends);
 
-    Friends update(Friends friends);
+    Friends update(FriendShipDto friends);
 
-    Friends delete(Friends friends);
+    void delete(FriendShipDto friends);
 
 }

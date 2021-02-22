@@ -20,10 +20,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Service(value = "userVipService")
 public class UserVipServiceImpl implements UserVipService, UserDetailsService {
@@ -63,9 +63,14 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
     public Long register(UsrVp userVip) {
         userVip.setPassword(bcryptEncoder.encode(userVip.getPassword()));
         userVip.setRole("VENUE");
-        UsrVp usrVp = userVipRepository.save(userVip);
+        Optional<UsrVp> usrVp = Optional.ofNullable(userVipRepository.getByEmail(userVip.getEmail()));
+        if(usrVp.isPresent()){
+            return 0L;
+        }
 
-        return usrVp.getId();
+        UsrVp usrVp1 = userVipRepository.save(userVip);
+
+        return usrVp1.getId();
     }
 
     @Override
@@ -74,13 +79,25 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
     }
 
     @Override
-    public Events addEvent(EventDto events) {
+    public Events addEvent(EventDto events) throws IOException {
      Events events1 = new Events();
      events1.setCity(events.getCity());
      events1.setDate(events.getDate());
      events1.setTitle(events.getTitle());
      events1.setUserVips(events.getUserVips());
-     events1.setEventImagePath(events.getEventImagePath());
+     events1.setEventImagePath(events.getImage()+events.getImageType());
+
+
+        String base64Image = events.getImage().split(",")[1];
+
+        byte[] imageByte=Base64.getDecoder().decode(base64Image);
+        String image_path =events.getUserVips().getId()+getAlphaNumericString(10);
+        String directory="/Users/furkanansin/IdeaProjects/images/"+ image_path+events.getImageType();
+
+        new FileOutputStream(directory).write(imageByte);
+
+
+
         return eventRepository.save(events1);
     }
 
@@ -116,4 +133,31 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
 
         return authorities;
     }
+    String getAlphaNumericString(int n )
+    {
+
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index
+                    = (int)(AlphaNumericString.length()
+                    * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString
+                    .charAt(index));
+        }
+
+        return sb.toString();
+    }
+
 }

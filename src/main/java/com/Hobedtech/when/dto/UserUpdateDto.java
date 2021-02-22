@@ -17,4 +17,6 @@ public class UserUpdateDto {
     private String latitude;
     private String longitude;
     private String gender;
+    private String image;
+    private String imageType;
 }

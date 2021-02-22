@@ -36,6 +36,9 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "pwd", length = 200)
     private String password;
 
+    @Column(name = "image")
+    private String image;
+
     @Email
     @Column(name = "email",unique = true)
     private String email;
@@ -91,6 +94,10 @@ public class User extends BaseEntity implements Serializable {
 
     @Column(name="expiry_date")
     private Date expiryDate;
+
+    @Column(name="active")
+    private boolean active;
+
 
     public Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();

@@ -16,6 +16,7 @@ public class UserDto {
     private String nameSurname;
     private String bio;
     private String firebaseId;
+    private String image;
     private String school;
     private Integer age;
     private String latitude;

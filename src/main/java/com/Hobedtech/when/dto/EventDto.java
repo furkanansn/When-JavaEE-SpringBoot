@@ -11,8 +11,9 @@ import java.util.Date;
 @Data
 public class EventDto {
     private String title;
-    private String eventImagePath;
     private String city;
     private Date date;
+    private String image;
+    private String imageType;
     private UsrVp userVips;
 }

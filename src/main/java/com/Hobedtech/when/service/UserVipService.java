@@ -9,6 +9,8 @@ import com.Hobedtech.when.entity.Events;
 import com.Hobedtech.when.entity.UsrVp;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserVipService {
@@ -20,7 +22,7 @@ public interface UserVipService {
     Long register(UsrVp userVip);
     String confirm();
 
-    Events addEvent(EventDto events);
+    Events addEvent(EventDto events) throws IOException;
     Boolean deleteEvents(Long id);
 
     List<Events> getEvents(Long userVipId);

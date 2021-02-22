@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,48 +27,55 @@ public class UserApi {
     }
 
     @PutMapping("/user-update")
-    public ResponseEntity<UserUpdateDto> userUpdate(@RequestBody UserUpdateDto userDto){
-        return ResponseEntity.ok(userServiceImpl.save(userDto));
+    public ResponseEntity<GeneralResponse> userUpdate(@RequestBody UserUpdateDto userDto) throws IOException {
+        return new GeneralApi().sendResponse(new GeneralResponse(true,userServiceImpl.save(userDto),null));
+
     }
 
     @GetMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestParam Long id, String password, String newPassword){
-        return ResponseEntity.ok(userServiceImpl.changePasswordByUser(id,password,newPassword));
+    public ResponseEntity<GeneralResponse> changePassword(@RequestParam Long id, String password, String newPassword){
+        return new GeneralApi().sendResponse(new GeneralResponse(true,userServiceImpl.changePasswordByUser(id,password,newPassword),null));
+
     }
 
 
 
     @GetMapping("/get-my-profile")
-    public ResponseEntity<UserDto> getMyProfileById(@RequestParam Long id){
+    public ResponseEntity<GeneralResponse> getMyProfileById(@RequestParam Long id){
         UserDto generalUserInfo = userServiceImpl.getById(id);
         Integer count =  userServiceImpl.countFriends(id);
         generalUserInfo.setFriendCount(count);
-        return ResponseEntity.ok(generalUserInfo);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,generalUserInfo,null));
+
     }
 
     @GetMapping("/get-user-profile")
-    public ResponseEntity<OtherUserDto> getUserProfileById(@RequestParam Long userId, @RequestParam Long otherUserId){
+    public ResponseEntity<GeneralResponse> getUserProfileById(@RequestParam Long userId, @RequestParam Long otherUserId){
         OtherUserDto generalUserInfo = userServiceImpl.getByIdOtherUser(userId);
         Integer count = userServiceImpl.countFriends(userId);
         String friendStuation = userServiceImpl.isFriend(userId,otherUserId);
         generalUserInfo.setFriendCount(count);
         generalUserInfo.setFriendStituation(friendStuation);
-        return ResponseEntity.ok(generalUserInfo);
+
+        return new GeneralApi().sendResponse(new GeneralResponse(true,generalUserInfo,null));
+
     }
     @GetMapping("/get-user-profile/check-in")
-    public ResponseEntity<ProfileCheckInDto> getUserProfileCheckIn(@RequestParam Long id){
+    public ResponseEntity<GeneralResponse> getUserProfileCheckIn(@RequestParam Long id){
         ProfileCheckInDto profileCheckInDto = userServiceImpl.getByIdProfileCheckIn(id);
-        return ResponseEntity.ok(profileCheckInDto);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,profileCheckInDto,null));
     }
     @GetMapping("/get-user-profile/fav")
-    public ResponseEntity<ProfileFavDto> getUserProfileFav(@RequestParam Long id){
+    public ResponseEntity<GeneralResponse> getUserProfileFav(@RequestParam Long id){
         ProfileFavDto profileFavDto = userServiceImpl.getByIdProfileFav(id);
-        return ResponseEntity.ok(profileFavDto);
+
+        return new GeneralApi().sendResponse(new GeneralResponse(true,profileFavDto,null));
+
     }
     @GetMapping("/get-user-profile/venue")
-    public ResponseEntity<UserVipDto> getUserProfileVenue(@RequestParam Long id){
+    public ResponseEntity<GeneralResponse> getUserProfileVenue(@RequestParam Long id){
         UserVipDto profileVenueDtoDto = userServiceImpl.getByIdProfileVenue(id);
         System.out.println(profileVenueDtoDto);
-        return ResponseEntity.ok(profileVenueDtoDto);
+        return new GeneralApi().sendResponse(new GeneralResponse(true,profileVenueDtoDto,null));
     }
 }
