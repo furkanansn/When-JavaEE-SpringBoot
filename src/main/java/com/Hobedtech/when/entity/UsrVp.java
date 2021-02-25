@@ -37,11 +37,11 @@ public class UsrVp extends BaseEntity {
     @Column(name = "password", length = 100)
     private String password;
 
-    @Column(name = "iframe", length = 100)
-    private String iFrame;
+    @Column(name ="latitude")
+    private Double latitude;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name ="longitude")
+    private Double longitude;
 
     @Column(name = "role")
     private String role;

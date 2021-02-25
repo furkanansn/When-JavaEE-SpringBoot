@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
 
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
 
     @Autowired
@@ -30,14 +30,19 @@ public class MailService {
 
 
 
-    public void sendEmail(String email,String link,String subject,String text) throws MailException {
-
-        System.out.println(link);
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(email);
-        mail.setSubject(subject);
-        mail.setText(text + "  " + link);
-        javaMailSender.send(mail);
+    public boolean sendEmail(String email,String link,String subject,String text) throws MailException {
+            boolean isEmailReal;
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(email);
+            mail.setSubject(subject);
+            mail.setText(text + "  " + link);
+            javaMailSender.send(mail);
+            isEmailReal= true;
+        }catch (MailException mailException){
+            isEmailReal= false;
+        }
+        return isEmailReal;
     }
 
 

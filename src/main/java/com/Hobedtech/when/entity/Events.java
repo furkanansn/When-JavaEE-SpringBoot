@@ -42,9 +42,7 @@ public class Events extends BaseEntity implements Serializable {
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE},fetch = FetchType.LAZY)
     Set<User> users;
 
-    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE},fetch = FetchType.LAZY)
-    Set<User> usersCheckIn;
+
 
     @JsonIgnore
     @ManyToOne
@@ -53,6 +51,11 @@ public class Events extends BaseEntity implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "events",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.MERGE})
     private Set<Comment> comments;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "events",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.MERGE})
+    private Set<CheckIn> checkIns;
 
 
 }

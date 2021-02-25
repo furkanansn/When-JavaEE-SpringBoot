@@ -2,6 +2,7 @@ package com.Hobedtech.when.util;
 
 
 public final class ApiPaths {
+    public static final String BASE_URL = "https://when-hobedtech.herokuapp.com/";
 
     private static final String BASE_PATH = "/api";
 
@@ -9,7 +10,9 @@ public final class ApiPaths {
     public static final String VENUEAPIKEY = "PM5n8TwxBL7ZDkmRshHe";
     public static final String ADMINAPIKEY = "9dTHINNUXsqA5O9tWHym";
 
-
+    public static final class CheckInCtrl{
+        public static final String CTRL = BASE_PATH + "/check-in";
+    }
     public static final class SearchCtrl {
         public static final String CTRL = BASE_PATH + "/search";
     }

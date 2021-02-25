@@ -17,7 +17,17 @@ import java.util.Set;
 public class FriendDto {
     @ApiModelProperty(required = true,value = "ID")
     private Long id;
-    private String phone;
     private String username;
+    private String nameSurname;
+    private String bio;
+    private String firebaseId;
+    private String school;
+    private String image;
+    private Integer age;
+    private String latitude;
+    private String longitude;
+    private String gender;
+    private Integer friendCount;
+    private String friendStituation;
 
 }

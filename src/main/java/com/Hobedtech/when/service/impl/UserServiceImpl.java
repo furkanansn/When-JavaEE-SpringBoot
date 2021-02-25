@@ -7,6 +7,7 @@ import com.Hobedtech.when.mail.MailService;
 import com.Hobedtech.when.repository.UserRepository;
 import com.Hobedtech.when.repository.UserVipRepository;
 import com.Hobedtech.when.service.UserService;
+import com.Hobedtech.when.util.ApiPaths;
 import com.Hobedtech.when.util.TPage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -57,16 +58,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserUpdateDto save(UserUpdateDto user) throws IOException {
         User currentUser = userRepository.findById(user.getId()).get();
-
         String base64Image = user.getImage().split(",")[1];
-
         byte[] imageByte=Base64.getDecoder().decode(base64Image);
         String image_path =currentUser.getUsername()+getAlphaNumericString(10);
         String directory="/Users/furkanansin/IdeaProjects/images/"+ image_path+user.getImageType();
-
         new FileOutputStream(directory).write(imageByte);
-
-
         currentUser.setImage(image_path+user.getImageType());
         currentUser.setAge(user.getAge());
         currentUser.setNameSurname(user.getNameSurname());
@@ -134,8 +130,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.getOne(id);
         String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
         String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
-        String validationLink = "http://localhost:8000/api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
-   //     notificationService.sendEmail(user.getEmail(),validationLink,subject,text);
+        String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
+        mailService.sendEmail(user.getEmail(),validationLink,subject,text);
         return user;
     }
 
@@ -145,10 +141,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(!user.getEmail().isEmpty()){
             user.setCreatedDate(new Date(System.currentTimeMillis()));
             user.setExpiryDate(user.calculateExpiryDate(60 * 24));
-            String validationLink = "http://localhost:8000/api/token/change-password?id=" + user.getId();
+            String validationLink = ApiPaths.BASE_URL+"api/token/change-password?id=" + user.getId();
             String subject = "When Parola Sıfırlama İsteği";
             String text = "Lütfen bu linke tıklayarak parolanızı sıfırlayınız";
-       //     notificationService.sendEmail(user.getEmail(), validationLink,subject,text);
+            mailService.sendEmail(user.getEmail(), validationLink,subject,text);
         }
         return null;
     }
@@ -161,14 +157,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setPassword(newPassword);
             String subject = "When Yeni Parolanız";
             String text = "";
-      //       notificationService.sendEmail(user.getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
+             mailService.sendEmail(user.getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
             return "Parola Başarıyla değiştirildi. Birazdan mail alıcaksınız.";
         }
 
         else {
             String subject = "When Yeni Parolanız";
             String text = "";
-      //      notificationService.sendEmail(user.getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
+            mailService.sendEmail(user.getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
 
             return "Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.";
         }
@@ -238,11 +234,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public boolean register(@Valid RegistrationRequest registrationRequest) {
+    public String register(@Valid RegistrationRequest registrationRequest) {
 
      Optional<User> userCheck = Optional.ofNullable(userRepository.findByEmail(registrationRequest.getEmail()));
      if(userCheck.isPresent()){
-         return false;
+         return "Bu E-posta adresi veya kullanıcı adı ile kayıtlı bir kullanıcı bulunmaktadır";
      }
          User user = new User();
         user.setToken(getAlphaNumericString(100));
@@ -253,25 +249,40 @@ public class UserServiceImpl implements UserService, UserDetailsService {
          user.setPassword(bcryptEncoder.encode(registrationRequest.getPassword()));
          user.setRole("USER");
          user.setActive(false);
-         User user1 =  userRepository.save(user);
+
+
          //send email
          String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
          String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
-         String validationLink = "http://localhost:8000/api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
-         mailService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
-     return true;
+         String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
+        boolean isEmailReal= mailService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
+        if(!isEmailReal){
+            return registrationRequest.getEmail() + " adlı E-posta adresi geçerli bir E-posta adresi değildir. Lütfen geçerli bir E-posta adresi girin";
+        }
+
+        User user1 =  userRepository.save(user);
+
+        return "";
+
 
     }
     @Transactional
     public boolean validate(Long id,String token){
+        boolean isOkay;
         try {
               User user =  userRepository.getOne(id);
             if(user.getToken().equals(token)){
                if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
                    user.setActive(true);
+                   isOkay = true;
                }
             }
-            return true;
+            String subject = "When Hesap Onaylama";
+            String text = "";
+            mailService.sendEmail(user.getEmail(),"Hesap aktivasyon linkinin süresi dolmuştur. Lütfen yeniden kayıt olunuz.",subject,text);
+            userRepository.delete(user);
+            isOkay = false;
+            return isOkay;
         }catch (Exception e){
             log.error(String.valueOf(e));
             return false;

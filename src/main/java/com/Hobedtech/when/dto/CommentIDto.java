@@ -10,6 +10,7 @@ import lombok.Data;
 public class CommentIDto {
     private Long id;
     private String username;
+    private String image;
     private String firebaseId;
 
 }
