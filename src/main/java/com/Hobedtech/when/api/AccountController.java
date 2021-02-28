@@ -51,10 +51,10 @@ public class AccountController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
-        String response = userService.register(registrationRequest);
+        Object response = userService.register(registrationRequest);
 
-        if(!response.isEmpty()){
-            return new GeneralApi().sendResponse(new GeneralResponse(false,null,response));
+        if(response !="" && response != null){
+            return new GeneralApi().sendResponse(new GeneralResponse(false,null,response.toString()));
 
         }
         return new GeneralApi().sendResponse(new GeneralResponse(true,response,null));
