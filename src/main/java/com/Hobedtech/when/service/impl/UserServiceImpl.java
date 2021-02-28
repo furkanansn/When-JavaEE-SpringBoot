@@ -250,17 +250,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
          user.setRole("USER");
          user.setActive(false);
 
+        User user1 =  userRepository.save(user);
 
          //send email
          String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
          String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
-         String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
+         String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user1.getId() + "&token=" + user.getToken();
         boolean isEmailReal= mailService.sendEmail(registrationRequest.getEmail(), validationLink,subject,text);
         if(!isEmailReal){
             return registrationRequest.getEmail() + " adlı E-posta adresi geçerli bir E-posta adresi değildir. Lütfen geçerli bir E-posta adresi girin";
         }
 
-        User user1 =  userRepository.save(user);
 
         return "";
 
