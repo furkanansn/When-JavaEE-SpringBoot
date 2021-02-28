@@ -53,11 +53,11 @@ public class AccountController {
     public ResponseEntity<GeneralResponse> register(@Valid @RequestBody RegistrationRequest registrationRequest) throws AuthenticationException {
         String response = userService.register(registrationRequest);
 
-        if(response !="" && response != null){
+        if(!response.isEmpty()){
             return new GeneralApi().sendResponse(new GeneralResponse(false,null,response.toString()));
 
         }
-        return new GeneralApi().sendResponse(new GeneralResponse(true,response,null));
+        return new GeneralApi().sendResponse(new GeneralResponse(true,"Başarıyla kayıt oldunuz. Lütfen E-postanıza gönderilen bağlantı ile doğrulama yapınız.",null));
     }
 
 

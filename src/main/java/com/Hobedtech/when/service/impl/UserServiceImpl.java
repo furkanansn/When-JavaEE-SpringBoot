@@ -262,7 +262,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
 
-        return "Başarıyla kayıt oldunuz. Lütfen E-postanıza gönderilen bağlantı ile doğrulama yapınız.";
+        return "";
 
 
     }
@@ -272,6 +272,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
               User user =  userRepository.getOne(id);
             if(user.getToken().equals(token)){
+                user.setActive(true);
+                userRepository.save(user);
             isOkay = true;
             return true;
             }
