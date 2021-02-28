@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public Object register(@Valid RegistrationRequest registrationRequest) {
+    public String register(@Valid RegistrationRequest registrationRequest) {
 
      Optional<User> userCheck = Optional.ofNullable(userRepository.findByEmail(registrationRequest.getEmail()));
      if(userCheck.isPresent()){
@@ -262,32 +262,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
 
-        return user1;
+        return "Başarıyla kayıt oldunuz. Lütfen E-postanıza gönderilen bağlantı ile doğrulama yapınız.";
 
 
     }
     @Transactional
     public boolean validate(Long id,String token){
         boolean isOkay;
-        try {
+
               User user =  userRepository.getOne(id);
             if(user.getToken().equals(token)){
-               if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
-                   user.setActive(true);
-                   isOkay = true;
-                   return isOkay;
-               }
+            isOkay = true;
+            return true;
             }
-            String subject = "When Hesap Onaylama";
-            String text = "";
-            mailService.sendEmail(user.getEmail(),"Hesap aktivasyon linkinin süresi dolmuştur. Lütfen yeniden kayıt olunuz.",subject,text);
-            userRepository.delete(user);
-            isOkay = false;
-            return isOkay;
-        }catch (Exception e){
-            log.error(String.valueOf(e));
-            return false;
-        }
+   return false;
     }
 
     @Override
