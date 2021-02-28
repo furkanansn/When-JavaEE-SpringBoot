@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String register(@Valid RegistrationRequest registrationRequest) {
+    public Object register(@Valid RegistrationRequest registrationRequest) {
 
      Optional<User> userCheck = Optional.ofNullable(userRepository.findByEmail(registrationRequest.getEmail()));
      if(userCheck.isPresent()){
@@ -262,7 +262,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
 
-        return "";
+        return user1;
 
 
     }
@@ -275,6 +275,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
                    user.setActive(true);
                    isOkay = true;
+                   return isOkay;
                }
             }
             String subject = "When Hesap Onaylama";
