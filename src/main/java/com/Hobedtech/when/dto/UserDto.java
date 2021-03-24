@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+import com.Hobedtech.when.entity.CheckIn;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +25,6 @@ public class UserDto {
     private String longitude;
     private String gender;
     private Integer friendCount;
+    private Set<CheckIn> checkIns;
+    
 }

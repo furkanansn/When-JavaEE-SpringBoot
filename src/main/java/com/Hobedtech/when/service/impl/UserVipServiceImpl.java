@@ -78,20 +78,28 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
         return null;
     }
 
-    @Override
+    @SuppressWarnings("resource")
+	@Override
     public Events addEvent(EventDto events) throws IOException {
+    	
+    	
      Events events1 = new Events();
      events1.setCity(events.getCity());
      events1.setDate(events.getDate());
      events1.setTitle(events.getTitle());
-     events1.setUserVips(events.getUserVips());
+     
+     Optional<UsrVp> userVp = userVipRepository.findById(events.getUserVipId());
+     
+     
+     
+     events1.setUserVips(userVp.get());
      events1.setEventImagePath(events.getImage()+events.getImageType());
 
 
         String base64Image = events.getImage().split(",")[1];
 
         byte[] imageByte=Base64.getDecoder().decode(base64Image);
-        String image_path =events.getUserVips().getId()+getAlphaNumericString(10);
+        String image_path = userVp.get().getId()+getAlphaNumericString(10);
         String directory="/Users/furkanansin/IdeaProjects/images/"+ image_path+events.getImageType();
 
         new FileOutputStream(directory).write(imageByte);

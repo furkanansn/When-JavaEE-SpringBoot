@@ -1,9 +1,8 @@
 package com.Hobedtech.when.dto;
 
-import com.Hobedtech.when.entity.UsrVp;
-import lombok.Data;
+import java.sql.Date;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * when Created by furkanansin on Dec, 2020
@@ -15,5 +14,5 @@ public class EventDto {
     private Date date;
     private String image;
     private String imageType;
-    private UsrVp userVips;
+    private Long userVipId;
 }

@@ -1,5 +1,9 @@
 package com.Hobedtech.when.dto;
 
+import java.util.Set;
+
+import com.Hobedtech.when.entity.CheckIn;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +28,6 @@ public class OtherUserDto {
     private String gender;
     private Integer friendCount;
     private String friendStituation;
+    private Set<CheckIn> checkIns;
+
 }
