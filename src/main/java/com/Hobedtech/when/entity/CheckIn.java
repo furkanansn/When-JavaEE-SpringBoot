@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "check_in")
 @Getter
@@ -22,6 +24,7 @@ public class CheckIn extends BaseEntity{
     @ManyToOne
     private Events events;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="users_id",unique = true)
     private User users;

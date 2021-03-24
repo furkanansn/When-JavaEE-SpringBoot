@@ -60,7 +60,7 @@ public class FriendsServiceImpl implements FriendsService {
         else{
             Friends friends2 = modelMapper.map(friends,Friends.class);
 
-            friends2.setFriendsStatus(FriendsStatus.PENDING);
+            friends2.setFriendsStatus(FriendsStatus.ACTIVE);
             friendsRepository.save(friends2);
             return true;
         }
@@ -77,6 +77,7 @@ public class FriendsServiceImpl implements FriendsService {
     @Override
     public void delete(FriendShipDto friends) {
         Friends friends1 = friendsRepository.findTopBy(friends.getFriendOne(),friends.getFriendTwo(),friends.getFriendOne(),friends.getFriendTwo());
+
         friendsRepository.delete(friends1);
     }
 }

@@ -36,7 +36,7 @@ public interface UserService {
 
     String changePasswordByUser(Long id , String password,String newPassword);
 
-    Integer countFriends(Long userId);
+    Object getFriends(Long userId);
 
     String isFriend(Long userId, Long otherUserId);
 }

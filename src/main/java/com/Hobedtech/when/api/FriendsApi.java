@@ -39,10 +39,11 @@ public class FriendsApi {
 
     }
 
-    @PutMapping
-    public ResponseEntity<GeneralResponse> updateFriend(@RequestBody FriendShipDto friends){
-        return new GeneralApi().sendResponse(new GeneralResponse(true,friendsServiceImpl.update(friends),null));
-    }
+	/*
+	 * @PutMapping public ResponseEntity<GeneralResponse> updateFriend(@RequestBody
+	 * FriendShipDto friends){ return new GeneralApi().sendResponse(new
+	 * GeneralResponse(true,friendsServiceImpl.update(friends),null)); }
+	 */
 
     @DeleteMapping
     public ResponseEntity<GeneralResponse> deleteFriend(@RequestBody FriendShipDto friends){

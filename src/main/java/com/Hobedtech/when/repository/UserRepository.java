@@ -17,13 +17,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
 
-    @Query(value = "select Count(friends.friend_one) from friends inner join users on friends.friend_two = users.id\n" +
+    @Query(value = "select * from friends inner join users on friends.friend_two = users.id\n" +
             "\t\t\t\t\twhere friends.friend_one = :userId and friends.status = 'ACTIVE'",nativeQuery = true)
-    Integer getCountFriendById(@Param("userId") Long userId);
+    List<User> getCountFriendById(@Param("userId") Long userId);
 
-    @Query(value = "select Count(friends.friend_two) from friends inner join users on friends.friend_one = users.id\n" +
+    @Query(value = "select * from friends inner join users on friends.friend_one = users.id\n" +
             "\t\t\t\t\twhere friends.friend_two = :userId and friends.status = 'ACTIVE'",nativeQuery = true)
-    Integer getCountFriendByIdPers(@Param("userId") Long userId);
+    List<User> getCountFriendByIdPers(@Param("userId") Long userId);
 
     @Query(value = "select friends.status from friends inner join users on friends.friend_two = users.id\n" +
             "\t\t\t\t\twhere friends.friend_one = :userId and friends.friend_two = :otherUserId and friends.status<> 'DEACTIVE' ",nativeQuery = true)

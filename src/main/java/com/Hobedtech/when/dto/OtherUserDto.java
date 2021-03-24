@@ -3,6 +3,7 @@ package com.Hobedtech.when.dto;
 import java.util.Set;
 
 import com.Hobedtech.when.entity.CheckIn;
+import com.Hobedtech.when.entity.Events;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class OtherUserDto {
     private String latitude;
     private String longitude;
     private String gender;
-    private Integer friendCount;
     private String friendStituation;
+    private Object frien;
     private Set<CheckIn> checkIns;
-
+    private Set<Events> events;
 }

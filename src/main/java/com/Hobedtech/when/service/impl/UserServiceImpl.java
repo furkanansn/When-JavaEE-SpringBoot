@@ -186,10 +186,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Integer countFriends(Long userId) {
-        int halfFriend = userRepository.getCountFriendById(userId);
-        int otherHalfFriend = userRepository.getCountFriendByIdPers(userId);
-        return halfFriend + otherHalfFriend;
+    public Object getFriends(Long userId) {
+        List<User> halfFriend = userRepository.getCountFriendById(userId);
+        List<User>  otherHalfFriend = userRepository.getCountFriendByIdPers(userId);
+        
+        List<User> allFriends = new ArrayList<User>();
+        
+        allFriends.addAll(halfFriend);
+        allFriends.addAll(otherHalfFriend);
+        
+        return allFriends;
     }
 
     @Override

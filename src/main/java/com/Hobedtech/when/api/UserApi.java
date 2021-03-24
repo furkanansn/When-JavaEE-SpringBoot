@@ -43,8 +43,8 @@ public class UserApi {
     @GetMapping("/get-my-profile")
     public ResponseEntity<GeneralResponse> getMyProfileById(@RequestParam Long id){
         UserDto generalUserInfo = userServiceImpl.getById(id);
-        Integer count =  userServiceImpl.countFriends(id);
-        generalUserInfo.setFriendCount(count);
+        Object friends =  userServiceImpl.getFriends(id);
+        generalUserInfo.setFrien(friends);
         return new GeneralApi().sendResponse(new GeneralResponse(true,generalUserInfo,null));
 
     }
@@ -52,9 +52,9 @@ public class UserApi {
     @GetMapping("/get-user-profile")
     public ResponseEntity<GeneralResponse> getUserProfileById(@RequestParam Long userId, @RequestParam Long otherUserId){
         OtherUserDto generalUserInfo = userServiceImpl.getByIdOtherUser(userId);
-        Integer count = userServiceImpl.countFriends(userId);
+        Object friends =  userServiceImpl.getFriends(otherUserId);
         String friendStuation = userServiceImpl.isFriend(userId,otherUserId);
-        generalUserInfo.setFriendCount(count);
+        generalUserInfo.setFrien(friends);
         generalUserInfo.setFriendStituation(friendStuation);
 
         return new GeneralApi().sendResponse(new GeneralResponse(true,generalUserInfo,null));

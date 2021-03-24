@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Events extends BaseEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title",length = 100)
@@ -44,7 +44,6 @@ public class Events extends BaseEntity implements Serializable {
 
 
 
-    @JsonIgnore
     @ManyToOne
     private UsrVp userVips;
 
