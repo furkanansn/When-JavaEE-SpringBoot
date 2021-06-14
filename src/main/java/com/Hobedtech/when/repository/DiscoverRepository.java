@@ -30,7 +30,7 @@ public interface DiscoverRepository extends JpaRepository<Events,Long> {
             "          ", nativeQuery = true)
     Integer countAll(@Param("cityName") String cityName, @Param("date") String date);
 
-
-    @Query(value = "select * from events where date > now()",nativeQuery = true)
+//where date > now()
+    @Query(value = "select * from events",nativeQuery = true)
     List<Events> getEventsForCyprus();
 }

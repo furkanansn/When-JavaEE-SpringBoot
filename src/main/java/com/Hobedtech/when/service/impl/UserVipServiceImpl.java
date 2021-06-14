@@ -67,9 +67,7 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
         if(usrVp.isPresent()){
             return 0L;
         }
-
         UsrVp usrVp1 = userVipRepository.save(userVip);
-
         return usrVp1.getId();
     }
 
