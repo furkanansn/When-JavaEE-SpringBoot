@@ -31,46 +31,46 @@ public class User extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uname", length = 100, unique = true)
+    @Column(name = "uname", length = 255, unique = true)
     private String username;
     @JsonIgnore
-    @Column(name = "pwd", length = 200)
+    @Column(name = "pwd", length = 255)
     private String password;
 
-    @Column(name = "image")
+    @Column(name = "image",length = 255)
     private String image;
     @JsonIgnore
     @Email
-    @Column(name = "email",unique = true)
+    @Column(name = "email",length = 255,unique = true)
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "phone",length = 255)
     private String phone;
 
-    @Column(name = "name_surname", length = 200)
+    @Column(name = "name_surname", length = 255)
     private String nameSurname;
 
-    @Column(name = "bio", length = 100)
+    @Column(name = "bio", length = 255)
     private String bio;
 
-    @Column(name = "firebase_id", length = 100)
+    @Column(name = "firebase_id", length = 255)
     private String firebaseId;
 
-    @Column(name = "school", length = 100)
+    @Column(name = "school", length = 255)
     private String school;
 
     @Column(name = "age")
     private Integer age;
 
 
-    @Column(name = "location")
+    @Column(name = "location",length = 255)
     private String location;
 
 
-    @Column(name = "gender")
+    @Column(name = "gender",length = 255)
     private String gender;
     @JsonIgnore
-    @Column(name = "role")
+    @Column(name = "role",length = 255)
     private String role;
 
     @JsonIgnore

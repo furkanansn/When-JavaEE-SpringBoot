@@ -19,34 +19,34 @@ public class UsrVp extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "venue_name",unique = true)
+    @Column(name = "venue_name",unique = true,length = 255)
     private String username;
 
-    @Column(name = "email", length = 30,unique = true)
+    @Column(name = "email", length = 255,unique = true)
     private String email;
 
-    @Column(name = "phone", length = 11)
+    @Column(name = "phone", length = 255)
     private String phone;
 
-    @Column(name = "venue_image_path", length = 100)
+    @Column(name = "venue_image_path", length = 255)
     private String photo;
 
-    @Column(name = "bio", length = 100)
+    @Column(name = "bio", length = 255)
     private String bio;
 
-    @Column(name = "password", length = 100)
+    @Column(name = "password", length = 255)
     private String password;
 
-    @Column(name ="latitude")
+    @Column(name ="latitude",length = 255)
     private Double latitude;
 
-    @Column(name ="longitude")
+    @Column(name ="longitude",length = 255)
     private Double longitude;
 
-    @Column(name = "role")
+    @Column(name = "role",length = 255)
     private String role;
 
-    @Column(name = "confirmed")
+    @Column(name = "confirmed",length = 255)
     private String confirmedAccount;
 
 

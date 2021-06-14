@@ -22,16 +22,16 @@ public class Events extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title",length = 100)
+    @Column(name = "title",length = 255)
     private String title;
 
-    @Column(name = "event_image_path",length = 200)
+    @Column(name = "event_image_path",length = 255)
     private String eventImagePath;
 
     @Column(name = "numberOfViews")
     private Long numberOfViews;
 
-    @Column(name = "city",length = 50)
+    @Column(name = "city",length = 255)
     private String city;
 
     @Temporal(TemporalType.TIMESTAMP)
