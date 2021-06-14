@@ -17,9 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @AllArgsConstructor
 public class CheckIn extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @ManyToOne
     private Events events;

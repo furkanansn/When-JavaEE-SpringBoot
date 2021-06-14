@@ -55,44 +55,50 @@ public class AccountController {
 
    @GetMapping("/generate-data")
    public ResponseEntity<GeneralResponse> generateData(){
-        for (int i = 0 ; i < 100 ; i++){
-            UsrVp usrVp = new UsrVp();
-            usrVp.setEmail("string" + String.valueOf(i) +"@gmail.com");
-            usrVp.setConfirmedAccount("true");
-            usrVp.setBio("Lorem İpsum Venue Bio");
-            usrVp.setLatitude(123.123);
-            usrVp.setLongitude(234.123);
-            usrVp.setPassword("string");
-            usrVp.setRole("VENUE");
-            usrVp.setPhone("+905449561307");
-            usrVp.setUsername("stringvenue"+String.valueOf(i));
-            usrVp.setPhoto("https://www.kibrispostasi.com/imagecache/newsimage/news/u/un/untitled-3_1597650146.jpg");
-            UsrVp usrVp1 = userVipRepository.save(usrVp);
-            for(int j = 0 ; j < 5; j++){
-                Events events = new Events();
-                events.setCity("Girne");
-                events.setDate(new Date());
-                events.setEventImagePath("https://static.dw.com/image/57028885_101.jpg");
-                events.setTitle("Lorem İpsum Event");
-                events.setNumberOfViews(100L);
-                events.setUserVips(usrVp1);
-                Events events1 = eventRepository.save(events);
-            }
-            User user = new User();
-            user.setBio("Lorem İpsum User Bio");
-            user.setEmail("string"+String.valueOf(i)+"@gmail.com");
-            user.setActive(true);
-            user.setUsername("string" + String.valueOf(i));
-            user.setAge(20);
-            user.setCreatedDate(new Date());
-            user.setNameSurname("String String");
-            user.setPassword("string");
-            user.setPhone("+905449561307");
-            user.setRole("USER");
-            user.setImage("https://pbs.twimg.com/profile_images/1269570753630015493/x4NFy1YH_400x400.jpg");
-            userRepository.save(user);
-        }
-        return new GeneralApi().sendResponse(new GeneralResponse(true,"eklendi",null));
+       try{
+           for (int i = 0 ; i < 100 ; i++){
+               UsrVp usrVp = new UsrVp();
+               usrVp.setEmail("string" + String.valueOf(i) +"@gmail.com");
+               usrVp.setConfirmedAccount("true");
+               usrVp.setBio("Lorem İpsum Venue Bio");
+               usrVp.setLatitude(123.123);
+               usrVp.setLongitude(234.123);
+               usrVp.setPassword("string");
+               usrVp.setRole("VENUE");
+               usrVp.setPhone("+905449561307");
+               usrVp.setUsername("stringvenue"+String.valueOf(i));
+               usrVp.setPhoto("https://www.kibrispostasi.com/imagecache/newsimage/news/u/un/untitled-3_1597650146.jpg");
+               UsrVp usrVp1 = userVipRepository.save(usrVp);
+               for(int j = 0 ; j < 5; j++){
+                   Events events = new Events();
+                   events.setCity("Girne");
+                   events.setDate(new Date());
+                   events.setEventImagePath("https://static.dw.com/image/57028885_101.jpg");
+                   events.setTitle("Lorem İpsum Event");
+                   events.setNumberOfViews(100L);
+                   events.setUserVips(usrVp1);
+                   Events events1 = eventRepository.save(events);
+               }
+               User user = new User();
+               user.setBio("Lorem İpsum User Bio");
+               user.setEmail("string"+String.valueOf(i)+"@gmail.com");
+               user.setActive(true);
+               user.setUsername("string" + String.valueOf(i));
+               user.setAge(20);
+               user.setCreatedDate(new Date());
+               user.setNameSurname("String String");
+               user.setPassword("string");
+               user.setPhone("+905449561307");
+               user.setRole("USER");
+               user.setImage("https://pbs.twimg.com/profile_images/1269570753630015493/x4NFy1YH_400x400.jpg");
+               userRepository.save(user);
+           }
+           return new GeneralApi().sendResponse(new GeneralResponse(true,"eklendi",null));
+
+       }catch (Exception e){
+           return new GeneralApi().sendResponse(new GeneralResponse(false,null,e.getMessage().toString()));
+       }
+
    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
