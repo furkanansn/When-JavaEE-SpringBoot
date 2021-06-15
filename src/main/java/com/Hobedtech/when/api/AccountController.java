@@ -56,6 +56,7 @@ public class AccountController {
    @GetMapping("/generate-data")
    public ResponseEntity<GeneralResponse> generateData(){
        try{
+           UsrVp usrVp1 = null;
            for (int i = 0 ; i < 100 ; i++){
                UsrVp usrVp = new UsrVp();
                usrVp.setEmail("string" + String.valueOf(i) +"@gmail.com");
@@ -63,12 +64,12 @@ public class AccountController {
                usrVp.setBio("Lorem İpsum Venue Bio");
                usrVp.setLatitude(123.123);
                usrVp.setLongitude(234.123);
-               usrVp.setPassword("string");
+               usrVp.setPassword(bcryptEncoder.encode("string"));
                usrVp.setRole("VENUE");
                usrVp.setPhone("+905449561307");
                usrVp.setUsername("stringvenue"+String.valueOf(i));
                usrVp.setPhoto("https://www.kibrispostasi.com/imagecache/newsimage/news/u/un/untitled-3_1597650146.jpg");
-               UsrVp usrVp1 = userVipRepository.save(usrVp);
+               usrVp1 = userVipRepository.save(usrVp);
                for(int j = 0 ; j < 5; j++){
                    Events events = new Events();
                    events.setCity("Girne");
@@ -87,12 +88,34 @@ public class AccountController {
                user.setAge(20);
                user.setCreatedDate(new Date());
                user.setNameSurname("String String");
-               user.setPassword("string");
+               user.setPassword(bcryptEncoder.encode("string"));
                user.setPhone("+905449561307");
                user.setRole("USER");
                user.setImage("https://pbs.twimg.com/profile_images/1269570753630015493/x4NFy1YH_400x400.jpg");
                userRepository.save(user);
+
            }
+           User user = new User();
+           user.setBio("PMI");
+           user.setEmail("duygusunar@yahoo.com");
+           user.setActive(true);
+           user.setUsername("duygusunar");
+           user.setAge(20);
+           user.setCreatedDate(new Date());
+           user.setNameSurname("Duygu Sunar");
+           user.setPassword(bcryptEncoder.encode("12345678"));
+           user.setPhone("+905389270882");
+           user.setRole("USER");
+           user.setImage("https://i1.sndcdn.com/avatars-000080450780-p3mz15-t500x500.jpg");
+           userRepository.save(user);
+           Events events = new Events();
+           events.setCity("Bornova");
+           events.setDate(new Date());
+           events.setEventImagePath("https://www.kariyer.net/ik-blog/wp-content/uploads/2018/08/toplanti.jpg");
+           events.setTitle("Toplantı");
+           events.setNumberOfViews(100L);
+           events.setUserVips(usrVp1);
+           Events events1 = eventRepository.save(events);
            return new GeneralApi().sendResponse(new GeneralResponse(true,"eklendi",null));
 
        }catch (Exception e){
