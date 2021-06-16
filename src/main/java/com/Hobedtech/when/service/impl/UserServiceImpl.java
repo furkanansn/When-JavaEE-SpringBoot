@@ -77,26 +77,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto getById(Long id) {
-        User u = userRepository.getOne(id);
-        return modelMapper.map(u, UserDto.class);
+        Optional<User> u = userRepository.findById(id);
+        return modelMapper.map(u.get(), UserDto.class);
     }
 
     @Override
     public OtherUserDto getByIdOtherUser(Long id) {
-        User u = userRepository.getOne(id);
-        return modelMapper.map(u, OtherUserDto.class);
+        Optional<User> u = userRepository.findById(id);
+        return modelMapper.map(u.get(), OtherUserDto.class);
     }
 
     @Override
     public ProfileCheckInDto getByIdProfileCheckIn(Long id) {
-        User u = userRepository.getOne(id);
-        return modelMapper.map(u, ProfileCheckInDto.class);
+        Optional<User> u = userRepository.findById(id);
+        return modelMapper.map(u.get(), ProfileCheckInDto.class);
     }
 
     @Override
     public ProfileFavDto getByIdProfileFav(Long id) {
-        User u = userRepository.getOne(id);
-        return modelMapper.map(u, ProfileFavDto.class);
+        Optional<User> u = userRepository.findById(id);
+        return modelMapper.map(u.get(), ProfileFavDto.class);
     }
 
     @Override
@@ -127,12 +127,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User sendAgain(Long id) {
-        User user = userRepository.getOne(id);
+        Optional<User> user = userRepository.findById(id);
         String subject = "When uygulamasına kayıt olduğunuz için teşekkür ederiz";
         String text = "Lütfen uygulamayı kullanmaya devam edebilmek için bu linkten hesabınızı doğrulayınız";
-        String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user.getId() + "&token=" + user.getToken();
-        mailService.sendEmail(user.getEmail(),validationLink,subject,text);
-        return user;
+        String validationLink = ApiPaths.BASE_URL+"api/token/validate?id=" + user.get().getId() + "&token=" + user.get().getToken();
+        mailService.sendEmail(user.get().getEmail(),validationLink,subject,text);
+        return user.get();
     }
 
     @Override
@@ -151,20 +151,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String changePassword(Long id) {
-        User user = userRepository.getOne(id);
+        Optional<User> user = userRepository.findById(id);
         String newPassword = getAlphaNumericString(8);
-        if (new Date(System.currentTimeMillis()).before(user.getExpiryDate())){
-            user.setPassword(newPassword);
+        if (new Date(System.currentTimeMillis()).before(user.get().getExpiryDate())){
+            user.get().setPassword(newPassword);
             String subject = "When Yeni Parolanız";
             String text = "";
-             mailService.sendEmail(user.getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
+             mailService.sendEmail(user.get().getEmail(),"Geçici parolanız:" +"  " + newPassword+ " " + "Bu parola ile giriş yapıp şifrenizi değiştirebilirsiniz.",subject,text);
             return "Parola Başarıyla değiştirildi. Birazdan mail alıcaksınız.";
         }
 
         else {
             String subject = "When Yeni Parolanız";
             String text = "";
-            mailService.sendEmail(user.getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
+            mailService.sendEmail(user.get().getEmail(),"Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.",subject,text);
 
             return "Parola sıfırlama linkinin süresi dolmuş. Lütfen yeni bir parola sıfırlama linki alınız.";
         }
@@ -172,12 +172,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String changePasswordByUser(Long id, String password,String newPassword) {
-        User user = userRepository.getOne(id);
+        Optional<User> user = userRepository.findById(id);
 
-        if(bcryptEncoder.matches(password,user.getPassword())){
+        if(bcryptEncoder.matches(password,user.get().getPassword())){
             String newPass = org.apache.commons.codec.digest.DigestUtils.sha256Hex(newPassword);
-            user.setPassword(newPass);
-            user.setCreatedDate(new Date(System.currentTimeMillis()));
+            user.get().setPassword(newPass);
+            user.get().setCreatedDate(new Date(System.currentTimeMillis()));
             return"true";
         }
             else {
@@ -276,10 +276,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean validate(Long id,String token){
         boolean isOkay;
 
-              User user =  userRepository.getOne(id);
-            if(user.getToken().equals(token)){
-                user.setActive(true);
-                userRepository.save(user);
+              Optional<User> user =  userRepository.findById(id);
+            if(user.get().getToken().equals(token)){
+                user.get().setActive(true);
+                userRepository.save(user.get());
             isOkay = true;
             return true;
             }
