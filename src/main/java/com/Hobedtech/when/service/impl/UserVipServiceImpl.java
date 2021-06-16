@@ -45,7 +45,7 @@ public class UserVipServiceImpl implements UserVipService, UserDetailsService {
 
     @Override
     public UserVipDto getById(Long id) {
-        return modelMapper.map(userVipRepository.getOne(id),UserVipDto.class);
+        return modelMapper.map(userVipRepository.findById(id).get(),UserVipDto.class);
     }
 
     @Override
